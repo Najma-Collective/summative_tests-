@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reading Proficiency Exam</title>
+    
+    <style>
+      :root {
+        --primary-sage: #7A8471;
+        --secondary-sage: #9CAF88;
+        --tertiary-sage: #B8C5A6;
+        --warm-cream: #F8F6F0;
+        --soft-white: #FEFCF7;
+        --forest-shadow: #5A6B52;
+        --border-sage: rgba(122, 132, 113, 0.2);
+        --hover-sage: rgba(156, 175, 136, 0.1);
+        --font-display: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        --font-body: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        min-height: 100vh;
+        font-family: var(--font-body);
+        background: var(--warm-cream);
+        color: var(--forest-shadow);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      #app-wrapper {
+          display: flex;
+          justify-content: center;
+          align-items: flex-start;
+          padding: 2rem;
+          box-sizing: border-box;
+          width: 100%;
+          min-height: 100vh;
+      }
+      #activity-container {
+        width: 100%;
+        max-width: 900px;
+        background: var(--soft-white);
+        padding: 48px;
+        border-radius: 20px;
+        border: 1px solid rgba(122, 132, 113, 0.12);
+        box-shadow: 0 10px 40px rgba(122, 132, 113, 0.1);
+        box-sizing: border-box;
+        position: relative;
+      }
+      .hidden {
+          display: none !important;
+      }
+      .screen.hidden {
+          display: none;
+      }
+      h1 {
+        font-family: var(--font-display);
+        font-size: 2.5rem;
+        color: var(--forest-shadow);
+        margin: 0 0 8px 0;
+        text-align: center;
+        font-weight: 600;
+      }
+      h2.rubric {
+          font-family: var(--font-body);
+          font-size: 1.1rem;
+          font-weight: 400;
+          color: var(--secondary-sage);
+          margin: 0 0 24px 0;
+          text-align: center;
+          line-height: 1.5;
+      }
+      h3 {
+          font-family: var(--font-display);
+          font-size: 1.5rem;
+          color: var(--forest-shadow);
+          margin: 24px 0 12px 0;
+      }
+      .activity-btn {
+          padding: 12px 24px;
+          border-radius: 12px;
+          border: 1px solid var(--primary-sage);
+          background-color: var(--primary-sage);
+          color: white;
+          font-weight: 600;
+          font-size: 1rem;
+          cursor: pointer;
+          transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+          -webkit-tap-highlight-color: transparent;
+          text-decoration: none;
+          display: inline-block;
+          box-shadow: 0 4px 12px rgba(122, 132, 113, 0.2);
+      }
+      .activity-btn:hover { 
+          background-color: var(--forest-shadow); 
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(90, 107, 82, 0.25);
+      }
+      .activity-btn:active {
+          transform: translateY(0px) scale(0.98);
+          box-shadow: 0 2px 8px rgba(122, 132, 113, 0.2);
+      }
+      .activity-btn:disabled {
+          background-color: var(--tertiary-sage);
+          border-color: var(--tertiary-sage);
+          cursor: not-allowed;
+          transform: none;
+          box-shadow: none;
+      }
+      .activity-btn.secondary {
+          background-color: transparent;
+          color: var(--primary-sage);
+          border-color: var(--tertiary-sage);
+          box-shadow: none;
+      }
+      .activity-btn.secondary:hover { 
+          background-color: var(--hover-sage); 
+          box-shadow: none;
+          transform: translateY(-1px);
+      }
+      input[type="text"], select {
+          width: 100%;
+          padding: 12px;
+          border-radius: 8px;
+          border: 1px solid var(--tertiary-sage);
+          font-size: 1rem;
+          font-family: var(--font-body);
+          box-sizing: border-box;
+          background-color: #fff;
+          color: var(--forest-shadow);
+          transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+      input[type="text"]:focus, select:focus {
+          outline: none;
+          border-color: var(--primary-sage);
+          box-shadow: 0 0 0 3px rgba(122, 132, 113, 0.15);
+      }
+      .controls {
+          margin-top: 32px;
+          text-align: center;
+      }
+      .test-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 16px;
+          font-weight: 600;
+          position: relative;
+      }
+      #save-indicator {
+          position: absolute;
+          top: 0;
+          left: 0;
+          font-size: 0.9rem;
+          color: var(--primary-sage);
+          opacity: 0;
+          transition: opacity 0.5s ease-out;
+      }
+      .progress-bar-container {
+          width: 100%;
+          height: 8px;
+          background-color: var(--border-sage);
+          border-radius: 4px;
+          overflow: hidden;
+      }
+      #progress-bar {
+          height: 100%;
+          width: 0%;
+          background-color: var(--primary-sage);
+          transition: width 0.4s ease;
+          background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+          background-size: 40px 40px;
+          animation: progress-bar-stripes 2s linear infinite;
+      }
+      @keyframes progress-bar-stripes {
+          from { background-position: 40px 0; }
+          to { background-position: 0 0; }
+      }
+      #progress-text {
+          text-align: right;
+          font-size: 0.9rem;
+          color: var(--secondary-sage);
+          margin-top: 8px;
+          margin-bottom: 24px;
+      }
+      .question-card {
+          padding: 24px;
+          border: 1px solid var(--border-sage);
+          border-radius: 16px;
+          margin-top: 24px;
+          background-color: var(--soft-white);
+          animation: fadeIn 0.5s ease-out forwards;
+      }
+      @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(15px); }
+          to { opacity: 1; transform: translateY(0); }
+      }
+      .question-header { margin-bottom: 16px; }
+      .question-text {
+          font-weight: 700;
+          font-size: 1.2rem;
+          color: var(--forest-shadow);
+          line-height: 1.4;
+      }
+      .options-container {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+      }
+      .option-label {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          cursor: pointer;
+          padding: 12px;
+          border-radius: 12px;
+          border: 2px solid transparent;
+          transition: background-color 0.2s, border-color 0.2s;
+          -webkit-tap-highlight-color: transparent;
+      }
+      .option-label:hover { background-color: var(--hover-sage); }
+      .option-label.selected {
+          border-color: var(--secondary-sage);
+          background-color: var(--hover-sage);
+      }
+      .option-label input[type="radio"] { display: none; }
+      .option-control {
+          flex-shrink: 0;
+          width: 24px;
+          height: 24px;
+          border: 2px solid var(--tertiary-sage);
+          background-color: var(--soft-white);
+          transition: all 0.2s ease;
+          position: relative;
+          border-radius: 50%;
+      }
+      .option-label.selected .option-control,
+      .option-label input[type="radio"]:checked + .option-control { 
+          border-color: var(--primary-sage); 
+      }
+      .option-label input[type="radio"]:checked + .option-control::after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 14px;
+          height: 14px;
+          border-radius: 50%;
+          background-color: var(--primary-sage);
+      }
+      .option-text { color: var(--primary-sage); line-height: 1.4; font-size: 1rem; }
+      .navigation-controls { margin-top: 32px; display: flex; justify-content: space-between; gap: 12px; }
+      .passage-box {
+        padding: 20px;
+        background-color: rgba(248, 246, 240, 0.7);
+        border: 1px solid var(--border-sage);
+        border-radius: 16px;
+        line-height: 1.6;
+        margin-bottom: 24px;
+      }
+      .passage-box h3 { margin-top: 0; }
+      /* --- FIX: Styles for the new HTML table --- */
+      .question-input-table {
+          width: 100%;
+          border-collapse: collapse;
+      }
+      .question-input-table td {
+          padding: 8px 4px;
+          vertical-align: middle;
+      }
+      .question-input-table td.table-label-cell {
+          width: 40%;
+          font-weight: 600;
+          color: var(--primary-sage);
+          padding-right: 16px;
+      }
+      .summary-completion-text p { line-height: 2; }
+      .summary-completion-text input[type="text"] {
+          width: 150px;
+          display: inline-block;
+          margin: 0 4px;
+          padding: 4px 8px;
+          font-size: 1rem;
+      }
+      #submission-code {
+          width: 100%;
+          height: 250px;
+          box-sizing: border-box;
+          margin: 12px 0;
+          font-family: monospace;
+          font-size: 0.9rem;
+          padding: 12px;
+          border: 1px solid var(--tertiary-sage);
+          border-radius: 8px;
+          background-color: var(--warm-cream);
+          color: var(--forest-shadow);
+      }
+      #submission-screen h3 { text-align: right; direction: rtl; }
+      .pulse-animation {
+        animation: pulse 1.5s infinite;
+      }
+      @keyframes pulse {
+        0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(122, 132, 113, 0.4); }
+        70% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(122, 132, 113, 0); }
+        100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(122, 132, 113, 0); }
+      }
+      @media (max-width: 767px) {
+          #app-wrapper { padding: 1rem; }
+          #activity-container { padding: 24px; }
+          h1 { font-size: 2rem; }
+          h2.rubric { font-size: 1rem; margin-bottom: 20px; }
+          .question-text { font-size: 1.1rem; }
+          .question-input-table td.table-label-cell { width: auto; display: block; padding-bottom: 4px; }
+          .question-input-table td { display: block; width: 100%; padding: 4px 0; }
+          .summary-completion-text input[type="text"] { width: 120px; }
+      }
+    </style>
+</head>
+<body>
+
+    <div id="app-wrapper">
+        <div id="activity-container">
+
+            <div id="welcome-screen" class="screen">
+                <h1>Reading Proficiency Exam</h1>
+                <h2 class="rubric">This is a high-stakes reading test with 40 questions. Your progress will be saved automatically. Please complete all questions.</h2>
+                <div class="controls">
+                    <button id="start-btn" class="activity-btn">Start Test</button>
+                </div>
+            </div>
+
+            <div id="test-screen" class="screen hidden">
+                <div class="test-header">
+                    <span id="part-indicator">Part 1</span>
+                    <div id="save-indicator">Progress Saved</div>
+                </div>
+                <div class="progress-bar-container">
+                    <div id="progress-bar"></div>
+                </div>
+                <div id="progress-text">Step 1 of 7</div>
+                
+                <div id="passage-container"></div>
+                <div id="question-container"></div>
+
+                <div class="navigation-controls">
+                    <button id="back-btn" class="activity-btn secondary">Back</button>
+                    <button id="next-btn" class="activity-btn">Next</button>
+                    <button id="finish-btn" class="activity-btn hidden">Finish & Submit</button>
+                </div>
+            </div>
+            
+            <div id="submission-screen" class="screen hidden">
+                <h1>Test Complete</h1>
+                <h2 class="rubric">Please follow the steps below to submit your test.</h2>
+                
+                <h3 dir="rtl">الخطوة 1: انسخ نتائجك</h3>
+                <p dir="rtl">انقر فوق الزر لنسخ بيانات الاختبار الخاصة بك إلى الحافظة. إذا لم يعمل الزر، فيرجى تحديد كل النص أدناه ونسخه يدويًا.</p>
+                <textarea id="submission-code" readonly></textarea>
+                <button id="copy-submission-btn" class="activity-btn">Copy to Clipboard</button>
+                
+                <h3 dir="rtl">الخطوة 2: الصق النتائج في النموذج</h3>
+                <p dir="rtl">بعد النسخ، انقر فوق الزر أدناه للانتقال إلى نموذج Google. الصق بياناتك في الحقل المخصص.</p>
+                <a id="google-form-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSeqvd7f2jZEwVf_MqkjVSe_3BGB_ohLvR1psUY1k9zdFAdOgA/viewform?usp=header" target="_blank" class="activity-btn secondary" style="pointer-events: none; opacity: 0.5;">Go to Google Form</a>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const dom = {
+            welcomeScreen: document.getElementById('welcome-screen'),
+            testScreen: document.getElementById('test-screen'),
+            submissionScreen: document.getElementById('submission-screen'),
+            startBtn: document.getElementById('start-btn'),
+            nextBtn: document.getElementById('next-btn'),
+            backBtn: document.getElementById('back-btn'),
+            finishBtn: document.getElementById('finish-btn'),
+            partIndicator: document.getElementById('part-indicator'),
+            progressBar: document.getElementById('progress-bar'),
+            progressText: document.getElementById('progress-text'),
+            passageContainer: document.getElementById('passage-container'),
+            questionContainer: document.getElementById('question-container'),
+            copyBtn: document.getElementById('copy-submission-btn'),
+            formBtn: document.getElementById('google-form-btn'),
+            submissionCodeArea: document.getElementById('submission-code'),
+            saveIndicator: document.getElementById('save-indicator'),
+        };
+
+        const passages = {
+            faq: `<h3>City Museum: Volunteer FAQ</h3><p><b>Q1: What is the time commitment?</b><br>We ask for a minimum commitment of four hours per week for at least six months. Shifts are available in the morning (9 AM - 1 PM) and afternoon (1 PM - 5 PM) from Tuesday to Sunday. The museum is closed to the public on Mondays.</p><p><b>Q2: What will I be doing?</b><br>Most new volunteers work in Visitor Services. Your main roles will be greeting visitors, answering questions about the museum layout, and providing information about current exhibitions. You will not be handling artwork or historical objects. Experienced volunteers may be trained for roles in the museum library.</p><p><b>Q3: Is there a dress code?</b><br>Yes. We provide you with a blue T-shirt with the museum logo. We ask that you wear it with your own black trousers and comfortable, clean shoes. Open-toed shoes, like sandals, are not permitted for safety reasons.</p><p><b>Q4: Do I need any special knowledge?</b><br>No, you do not need to be an expert in art or history. We will provide all necessary training about the museum's collection and layout. The most important quality is a friendly, helpful attitude.</p><p><b>Q5: Will I get free entry to the museum?</b><br>Yes, as an active volunteer, you receive a pass that gives you free entry to the museum anytime. It also gives you a 10% discount at the museum café. The pass is for your use only and cannot be given to friends or family.</p>`,
+            bicycle: `<h3>The History of the Bicycle</h3><p><b>A.</b> The bicycle is such a common form of transport today that it is hard to imagine a world without it. However, its invention was not a single event but a long process of development. The first machine that looked like a bicycle appeared in Germany in 1817. Invented by Karl von Drais, it was called a “running machine.” It was made of wood and had two wheels and a handlebar to steer, but it had no pedals. To move it, a person had to push their feet along the ground.</p><p><b>B.</b> The first major change to this design came in the 1860s in France. Pedals were attached directly to the center of the front wheel. This new machine was called the velocipede. These early bicycles were difficult to ride. The wooden wheels and iron tires made for an extremely uncomfortable journey on the stone roads of the time. They were nicknamed “boneshakers” for a very good reason.</p><p><b>C.</b> In the 1870s, inventors tried to make the bicycle faster. They discovered that the larger the front wheel, the further the bicycle would travel with one turn of the pedals. This led to the creation of the “high-wheel” bicycle, also known as the “penny-farthing.” The front wheel was huge, and the rider sat very high above the ground. While it was much faster than the velocipede, it was also very dangerous. If the rider hit a small stone on the road, they could easily be thrown forward off the bicycle, leading to serious injury.</p><p><b>D.</b> The solution to these safety problems came in the 1880s with the invention of the “safety bicycle.” It had two wheels of the same size and used a chain to connect the pedals to the back wheel. This design meant the rider could sit at a much lower and safer height. With the addition of rubber tires filled with air, the ride became much more comfortable. This basic design was so successful that it is still used for most bicycles today.</p><p><b>E.</b> The arrival of the safe and affordable bicycle had a huge social impact. It gave people a new level of personal freedom. For workers in cities, it was a cheap way to travel to factories, allowing them to live further away from their workplace. It also played a significant role in the changing role of women in society, giving them the freedom to travel independently for the first time.</p>`
+        };
+
+        const examData = [
+            // Part 1
+            { part: 1, type: 'fill-in-table', questionText: 'Questions 1-5: Complete the table below.', passage: `<h3>Welcome to Northwood Community Centre!</h3><p>Your local hub for learning and activities. Find something new to try this season!</p><h4>Weekly Activities Schedule – Main Hall</h4><table><tr><th>Day</th><th>Time</th><th>Activity</th><th>Instructor</th></tr><tr><td>Monday</td><td>6:00 PM – 7:00 PM</td><td>Yoga for Beginners</td><td>Ms. Chen</td></tr><tr><td>Tuesday</td><td>7:00 PM – 8:30 PM</td><td>Digital Photography</td><td>Mr. Davies</td></tr><tr><td>Wednesday</td><td>5:30 PM – 6:30 PM</td><td>Public Speaking</td><td>Ms. Rossi</td></tr><tr><td>Thursday</td><td>7:30 PM – 9:00 PM</td><td>Creative Writing</td><td>Mr. Ford</td></tr></table><h4>Contact & Location:</h4><p>For more information, visit the reception desk in Room 102. The centre is located at 15 Park Road.</p>`, items: [ { id: 1, label: "Yoga Instructor's Name" }, { id: 2, label: 'Activity with Ms. Rossi' }, { id: 3, label: 'Creative Writing Location' }, { id: 4, label: 'Information Desk Room' }, { id: 5, label: 'Centre Street Name' } ] },
+            { part: 1, type: 'matching', questionText: 'Questions 6-10: Which activity is the best choice for...', passage: `<h4>Activity Descriptions:</h4><p><b>(A) Yoga for Beginners:</b> Learn basic yoga positions to improve your flexibility and reduce stress. Please bring your own mat. Suitable for all fitness levels.</p><p><b>(B) Digital Photography:</b> Want to take better pictures? This course covers camera basics, lighting, and composition. A digital camera is required.</p><p><b>(C) Public Speaking:</b> This workshop will help you build confidence for presentations at work or school. Learn techniques to speak clearly and calmly in front of a group.</p><p><b>(D) Creative Writing:</b> Join our friendly group to explore your imagination. We will work on short stories and poetry. No experience is necessary, just a pen and paper.</p>`, items: [ { id: 6, text: '... learn how to use a camera?' }, { id: 7, text: '... feel more relaxed and improve their physical health?' }, { id: 8, text: '... become a better speaker in front of an audience?' }, { id: 9, text: '... write stories?' }, { id: 10, text: '... improve their confidence before a work presentation?' } ], options: ['A', 'B', 'C', 'D'] },
+            // Part 2
+            { part: 2, type: 'true-false-ng', questionText: 'Questions 11-17: Do the following statements agree with the information?', passage: passages.faq, items: [ { id: 11, text: 'Volunteers must work for at least six months.' }, { id: 12, text: 'The museum is open seven days a week.' }, { id: 13, text: 'New volunteers are responsible for cleaning historical objects.' }, { id: 14, text: 'The museum provides volunteers with a full uniform.' }, { id: 15, text: 'Volunteers must have a university degree in history.' }, { id: 16, text: 'The volunteer pass allows you to bring a friend for free.' }, { id: 17, text: 'The museum café offers a discount to volunteers.' } ] },
+            { part: 2, type: 'short-answer', questionText: 'Questions 18-20: Answer the questions below.', passage: passages.faq, items: [ { id: 18, text: 'What department do most new volunteers work in?' }, { id: 19, text: 'For safety, what kind of shoes are not allowed?' }, { id: 20, text: 'What is the most important quality for a volunteer to have?' } ] },
+            // Part 3
+            { part: 3, type: 'matching-dropdown', questionText: 'Questions 21-25: Match the heading to the correct paragraph.', passage: passages.bicycle, items: [ { id: 21, label: 'Paragraph A' }, { id: 22, label: 'Paragraph B' }, { id: 23, label: 'Paragraph C' }, { id: 24, label: 'Paragraph D' }, { id: 25, label: 'Paragraph E' } ], options: ['A fast but dangerous machine', 'A design that is still in use', 'The first bicycle with no pedals', 'A new kind of personal freedom', 'An uncomfortable but important step'] },
+            { part: 3, type: 'mc', questionText: 'Questions 26-31: Choose the correct letter.', passage: passages.bicycle, items: [ { id: 26, text: 'The "running machine" was different from a modern bicycle because...', options: ['it was made of wood.', 'it was difficult to steer.', 'it lacked pedals.', 'it had only one wheel.'] }, { id: 27, text: 'Why was the velocipede known as the "boneshaker"?', options: ['It often broke on stone roads.', 'The ride was extremely rough.', 'It was very heavy to move.', 'The pedals were hard to turn.'] }, { id: 28, text: 'Inventors created the "penny-farthing" with a huge front wheel in order to...', options: ['improve its safety.', 'make it more comfortable.', 'increase its speed.', 'help the rider see further.'] }, { id: 29, text: 'What was the most significant safety feature of the "safety bicycle"?', options: ['The air-filled rubber tires.', 'The chain connecting the pedals to the back wheel.', 'The lower position of the rider.', 'The two wheels of identical size.'] }, { id: 30, text: 'The text suggests that the main benefit of the bicycle for city workers was...', options: ['financial.', 'social.', 'recreational.', 'health-related.'] }, { id: 31, text: 'What can be inferred about the lives of women before the "safety bicycle"?', options: ['They did not work in factories.', 'They had less freedom to travel alone.', 'They preferred older models of bicycles.', 'They were not interested in new technology.'] } ] },
+            { part: 3, type: 'summary-completion', questionText: 'Questions 32-40: Complete the summary below.', passage: passages.bicycle, text: 'The modern bicycle developed through several stages. A later model, the "penny-farthing," was designed to be %%, but it was not very safe. A major change came with the safety bicycle, which used a %% to power the back wheel. This meant the rider could sit at a lower %%. The journey also became more %% with the introduction of air-filled tires. The new bicycle had a major %% impact on society. It provided people with greater personal %%. For example, it allowed workers to live further from their %% and gave women more independence. The basic %% of the safety bicycle was so effective that it is %% commonly used in the present day.', items: [ { id: 32 }, { id: 33 }, { id: 34 }, { id: 35 }, { id: 36 }, { id: 37 }, { id: 38 }, { id: 39 }, { id: 40 } ] },
+        ];
+        
+        const totalQuestions = examData.reduce((acc, q) => acc + q.items.length, 0);
+        let state = {
+            currentIndex: 0,
+            answers: {}
+        };
+        let saveIndicatorTimeout;
+
+        const debounce = (func, delay) => {
+            let timeoutId;
+            return (...args) => {
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => {
+                    func.apply(this, args);
+                }, delay);
+            };
+        };
+
+        const renderQuestion = () => {
+            dom.passageContainer.innerHTML = '';
+            dom.questionContainer.innerHTML = '';
+            
+            const questionBlock = examData[state.currentIndex];
+
+            // --- STABILITY ENHANCEMENT: Validate question data before rendering ---
+            if (!questionBlock || !Array.isArray(questionBlock.items)) {
+                console.error('Error: Invalid question data at index', state.currentIndex, questionBlock);
+                dom.questionContainer.innerHTML = '<p>An error occurred while loading this question. Please contact support.</p>';
+                return;
+            }
+
+            if (questionBlock.passage) {
+                dom.passageContainer.innerHTML = `<div class="passage-box">${questionBlock.passage}</div>`;
+            }
+
+            let html = `<div class="question-card"><div class="question-header"><p class="question-text">${questionBlock.questionText}</p></div><div class="options-container">`;
+
+            switch (questionBlock.type) {
+                case 'fill-in-table':
+                case 'short-answer':
+                    // --- FIX: Use a semantic HTML table for proper formatting ---
+                    html += `<table class="question-input-table"><tbody>`;
+                    questionBlock.items.forEach(item => {
+                        const savedValue = state.answers[item.id] || '';
+                        html += `<tr>
+                                    <td class="table-label-cell">
+                                        <label for="q-${item.id}">${item.id}. ${item.label || item.text}</label>
+                                    </td>
+                                    <td>
+                                        <input type="text" id="q-${item.id}" data-question-id="${item.id}" value="${savedValue}">
+                                    </td>
+                                 </tr>`;
+                    });
+                    html += `</tbody></table>`;
+                    break;
+                case 'matching-dropdown':
+                    html += `<table class="question-input-table"><tbody>`;
+                    questionBlock.items.forEach(item => {
+                        const savedValue = state.answers[item.id] || '';
+                        html += `<tr>
+                                    <td class="table-label-cell">
+                                        <label for="q-${item.id}">${item.id}. ${item.label || item.text}</label>
+                                    </td>
+                                    <td>
+                                        <select id="q-${item.id}" data-question-id="${item.id}">
+                                            <option value="">Select...</option>`;
+                        (questionBlock.options || []).forEach(opt => {
+                             html += `<option value="${opt}" ${savedValue === opt ? 'selected' : ''}>${opt}</option>`;
+                        });
+                        html += `</select>
+                                    </td>
+                                 </tr>`;
+                    });
+                    html += `</tbody></table>`;
+                    break;
+                case 'matching':
+                case 'true-false-ng':
+                case 'mc':
+                    questionBlock.items.forEach(item => {
+                        html += `<p style="margin-top: 20px; font-weight: 600;">${item.id}. ${item.text}</p>`;
+                        const options = questionBlock.options || item.options || ['TRUE', 'FALSE', 'NOT GIVEN'];
+                        options.forEach(option => {
+                            const isChecked = state.answers[item.id] === option;
+                            const selectedClass = isChecked ? 'selected' : '';
+                            html += `
+                                <label class="option-label ${selectedClass}">
+                                    <input type="radio" name="q-${item.id}" value="${option}" data-question-id="${item.id}" ${isChecked ? 'checked' : ''}>
+                                    <span class="option-control"></span>
+                                    <span class="option-text">${option}</span>
+                                </label>`;
+                        });
+                    });
+                    break;
+                case 'summary-completion':
+                    const textParts = questionBlock.text.split('%%');
+                    let summaryHtml = '<p>';
+                    textParts.forEach((part, index) => {
+                        summaryHtml += part;
+                        if (index < questionBlock.items.length) {
+                            const item = questionBlock.items[index];
+                            const savedValue = state.answers[item.id] || '';
+                            summaryHtml += `<input type="text" id="q-${item.id}" placeholder="${item.id}" data-question-id="${item.id}" value="${savedValue}">`;
+                        }
+                    });
+                    summaryHtml += '</p>';
+                    html += `<div class="summary-completion-text">${summaryHtml}</div>`;
+                    break;
+            }
+            html += `</div></div>`;
+            dom.questionContainer.innerHTML = html;
+            updateUI();
+        };
+
+        const updateUI = () => {
+            const isLastQuestion = state.currentIndex === examData.length - 1;
+            
+            dom.partIndicator.textContent = `Part ${examData[state.currentIndex].part}`;
+            dom.progressText.textContent = `Step ${state.currentIndex + 1} of ${examData.length}`;
+            dom.progressBar.style.width = `${((state.currentIndex + 1) / examData.length) * 100}%`;
+
+            dom.backBtn.disabled = state.currentIndex === 0;
+
+            dom.nextBtn.classList.toggle('hidden', isLastQuestion);
+            dom.finishBtn.classList.toggle('hidden', !isLastQuestion);
+        };
+
+        const showSaveIndicator = () => {
+            clearTimeout(saveIndicatorTimeout);
+            dom.saveIndicator.style.opacity = '1';
+            saveIndicatorTimeout = setTimeout(() => {
+                dom.saveIndicator.style.opacity = '0';
+            }, 1500);
+        };
+        
+        const saveProgress = () => {
+             try {
+                localStorage.setItem('examProgress', JSON.stringify(state));
+                showSaveIndicator();
+            } catch (e) {
+                console.error("Could not save progress to localStorage.", e);
+            }
+        };
+
+        const debouncedSave = debounce(saveProgress, 500);
+
+        const handleInputChange = (id, value, targetElement) => {
+            state.answers[id] = value;
+
+            if (targetElement && targetElement.type === 'radio') {
+                const name = targetElement.name;
+                document.querySelectorAll(`input[name="${name}"]`).forEach(radio => {
+                    radio.parentElement.classList.remove('selected');
+                });
+                targetElement.parentElement.classList.add('selected');
+                saveProgress();
+            } else {
+                debouncedSave();
+            }
+        };
+        
+        const setupEventListeners = () => {
+            dom.questionContainer.addEventListener('change', (event) => {
+                const target = event.target;
+                const questionId = target.dataset.questionId;
+                if (questionId && (target.tagName === 'SELECT' || target.type === 'radio')) {
+                    handleInputChange(questionId, target.value, target);
+                }
+            });
+            dom.questionContainer.addEventListener('input', (event) => {
+                const target = event.target;
+                const questionId = target.dataset.questionId;
+                if (questionId && target.type === 'text') {
+                    handleInputChange(questionId, target.value, target);
+                }
+            });
+        };
+
+        const loadProgress = () => {
+            try {
+                const saved = localStorage.getItem('examProgress');
+                if (saved) {
+                    state = JSON.parse(saved);
+                }
+            } catch(e) {
+                console.error("Could not load progress from localStorage. Resetting state.", e);
+                state = { currentIndex: 0, answers: {} };
+            }
+        };
+
+        const goToNext = () => {
+            if (state.currentIndex < examData.length - 1) {
+                state.currentIndex++;
+                renderQuestion();
+                window.scrollTo(0, 0);
+            }
+        };
+
+        const goToBack = () => {
+            if (state.currentIndex > 0) {
+                state.currentIndex--;
+                renderQuestion();
+                window.scrollTo(0, 0);
+            }
+        };
+
+        const startTest = () => {
+            dom.welcomeScreen.classList.add('hidden');
+            dom.testScreen.classList.remove('hidden');
+            renderQuestion();
+        };
+
+        const finishTest = () => {
+            let csvData = "Question,Answer\n";
+            for (let i = 1; i <= totalQuestions; i++) {
+                const answer = state.answers[i] || "NO_ANSWER";
+                const sanitizedAnswer = String(answer).replace(/"/g, '""');
+                csvData += `${i},"${sanitizedAnswer}"\n`;
+            }
+            
+            dom.submissionCodeArea.value = csvData;
+            dom.testScreen.classList.add('hidden');
+            dom.submissionScreen.classList.remove('hidden');
+            dom.copyBtn.classList.add('pulse-animation');
+        };
+
+        const copyResults = () => {
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(dom.submissionCodeArea.value).then(() => {
+                    dom.copyBtn.textContent = "Copied!";
+                    dom.copyBtn.classList.remove('pulse-animation');
+                    dom.formBtn.style.opacity = '1';
+                    dom.formBtn.style.pointerEvents = 'auto';
+                    dom.formBtn.classList.add('pulse-animation');
+                }).catch(err => {
+                    alert('Automatic copy failed. Please select the text and copy it manually.');
+                });
+            } else {
+                 alert('Automatic copy is not available. Please select the text and copy it manually.');
+            }
+        };
+        
+        dom.startBtn.addEventListener('click', startTest);
+        dom.nextBtn.addEventListener('click', goToNext);
+        dom.backBtn.addEventListener('click', goToBack);
+        dom.finishBtn.addEventListener('click', finishTest);
+        dom.copyBtn.addEventListener('click', copyResults);
+        
+        loadProgress();
+        setupEventListeners();
+    });
+    </script>
+</body>
+</html>

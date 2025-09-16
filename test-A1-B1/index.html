@@ -32,20 +32,25 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }
+      body {
+        min-height: 100dvh;
+        overflow-x: hidden;
+      }
       #app-wrapper {
           display: flex;
           justify-content: center;
           align-items: flex-start;
-          padding: 2rem;
+          padding: clamp(1.5rem, 4vw, 2.5rem);
           box-sizing: border-box;
           width: 100%;
           min-height: 100vh;
+          min-height: 100dvh;
       }
       #activity-container {
         width: 100%;
         max-width: 900px;
         background: var(--soft-white);
-        padding: 48px;
+        padding: clamp(24px, 4vw + 16px, 48px);
         border-radius: 20px;
         border: 1px solid rgba(122, 132, 113, 0.12);
         box-shadow: 0 10px 40px rgba(122, 132, 113, 0.1);
@@ -90,6 +95,7 @@
           font-weight: 600;
           font-size: 1rem;
           cursor: pointer;
+          touch-action: manipulation;
           transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
           -webkit-tap-highlight-color: transparent;
           text-decoration: none;
@@ -255,7 +261,7 @@
           background-color: var(--primary-sage);
       }
       .option-text { color: var(--primary-sage); line-height: 1.4; font-size: 1rem; }
-      .navigation-controls { margin-top: 32px; display: flex; justify-content: space-between; gap: 12px; }
+      .navigation-controls { margin-top: 32px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
       .passage-box {
         padding: 20px;
         background-color: rgba(248, 246, 240, 0.7);
@@ -300,6 +306,8 @@
           border-radius: 8px;
           background-color: var(--warm-cream);
           color: var(--forest-shadow);
+          overflow-wrap: anywhere;
+          word-break: break-word;
       }
       #submission-screen h3 { text-align: right; direction: rtl; }
       .pulse-animation {
@@ -312,13 +320,21 @@
       }
       @media (max-width: 767px) {
           #app-wrapper { padding: 1rem; }
-          #activity-container { padding: 24px; }
+          #activity-container { padding: 20px; border-radius: 16px; }
           h1 { font-size: 2rem; }
           h2.rubric { font-size: 1rem; margin-bottom: 20px; }
           .question-text { font-size: 1.1rem; }
           .question-input-table td.table-label-cell { width: auto; display: block; padding-bottom: 4px; }
           .question-input-table td { display: block; width: 100%; padding: 4px 0; }
           .summary-completion-text input[type="text"] { width: 120px; }
+          .navigation-controls { flex-direction: column; align-items: stretch; gap: 10px; }
+          .navigation-controls .activity-btn { width: 100%; text-align: center; }
+          #submission-code { height: 180px; }
+      }
+      @media (max-width: 480px) {
+          h1 { font-size: 1.75rem; }
+          .activity-btn { font-size: 0.95rem; padding: 12px 18px; }
+          #submission-code { font-size: 0.85rem; }
       }
     </style>
 </head>
@@ -418,6 +434,8 @@
             answers: {}
         };
         let saveIndicatorTimeout;
+        let copyFeedbackTimeout;
+        const defaultCopyButtonText = dom.copyBtn.textContent;
 
         const debounce = (func, delay) => {
             let timeoutId;
@@ -633,22 +651,125 @@
             dom.submissionCodeArea.value = csvData;
             dom.testScreen.classList.add('hidden');
             dom.submissionScreen.classList.remove('hidden');
+            clearTimeout(copyFeedbackTimeout);
+            dom.copyBtn.disabled = false;
+            dom.copyBtn.textContent = defaultCopyButtonText;
             dom.copyBtn.classList.add('pulse-animation');
+            dom.formBtn.classList.remove('pulse-animation');
+            dom.formBtn.style.opacity = '0.5';
+            dom.formBtn.style.pointerEvents = 'none';
         };
 
-        const copyResults = () => {
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(dom.submissionCodeArea.value).then(() => {
-                    dom.copyBtn.textContent = "Copied!";
-                    dom.copyBtn.classList.remove('pulse-animation');
-                    dom.formBtn.style.opacity = '1';
-                    dom.formBtn.style.pointerEvents = 'auto';
-                    dom.formBtn.classList.add('pulse-animation');
-                }).catch(err => {
-                    alert('Automatic copy failed. Please select the text and copy it manually.');
-                });
+        const setCopyFeedback = (message, resetDelay = 2500) => {
+            clearTimeout(copyFeedbackTimeout);
+            dom.copyBtn.textContent = message;
+            if (resetDelay !== null) {
+                copyFeedbackTimeout = setTimeout(() => {
+                    dom.copyBtn.textContent = defaultCopyButtonText;
+                }, resetDelay);
+            }
+        };
+
+        const attemptClipboardCopy = async (text) => {
+            if (!text) {
+                return false;
+            }
+            if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    return true;
+                } catch (error) {
+                    console.warn('Clipboard API copy failed', error);
+                }
+            }
+            return false;
+        };
+
+        const fallbackCopyText = (text) => {
+            if (!text || typeof document.execCommand !== 'function') {
+                return false;
+            }
+
+            try {
+                if (document.queryCommandSupported && !document.queryCommandSupported('copy')) {
+                    return false;
+                }
+            } catch (error) {
+                console.warn('queryCommandSupported("copy") threw an error', error);
+            }
+
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = text;
+            tempTextArea.setAttribute('readonly', '');
+            tempTextArea.setAttribute('aria-hidden', 'true');
+            tempTextArea.style.position = 'fixed';
+            tempTextArea.style.top = '0';
+            tempTextArea.style.left = '0';
+            tempTextArea.style.width = '1px';
+            tempTextArea.style.height = '1px';
+            tempTextArea.style.opacity = '0';
+            tempTextArea.style.pointerEvents = 'none';
+            tempTextArea.style.zIndex = '-1';
+
+            const parent = document.body || document.documentElement;
+            parent.appendChild(tempTextArea);
+
+            try {
+                tempTextArea.focus({ preventScroll: true });
+            } catch (error) {
+                tempTextArea.focus();
+            }
+
+            try {
+                tempTextArea.select();
+                tempTextArea.setSelectionRange(0, tempTextArea.value.length);
+            } catch (error) {
+                console.warn('Selecting the temporary textarea failed', error);
+            }
+
+            let successful = false;
+            try {
+                successful = document.execCommand('copy');
+            } catch (error) {
+                console.warn('document.execCommand("copy") failed', error);
+            } finally {
+                if (tempTextArea.parentNode) {
+                    tempTextArea.parentNode.removeChild(tempTextArea);
+                }
+            }
+
+            return successful;
+        };
+
+        const copyResults = async () => {
+            const textToCopy = dom.submissionCodeArea.value;
+            if (!textToCopy) {
+                return;
+            }
+
+            dom.copyBtn.disabled = true;
+
+            let copied = false;
+            try {
+                copied = await attemptClipboardCopy(textToCopy);
+                if (!copied) {
+                    copied = fallbackCopyText(textToCopy);
+                }
+            } finally {
+                dom.copyBtn.disabled = false;
+            }
+
+            dom.copyBtn.blur();
+
+            if (copied) {
+                dom.copyBtn.classList.remove('pulse-animation');
+                setCopyFeedback('Copied!', 3000);
+                dom.formBtn.style.opacity = '1';
+                dom.formBtn.style.pointerEvents = 'auto';
+                dom.formBtn.classList.add('pulse-animation');
             } else {
-                 alert('Automatic copy is not available. Please select the text and copy it manually.');
+                setCopyFeedback('Copy failed', 4000);
+                alert('Automatic copy is not available. Please select the text and copy it manually.');
             }
         };
         

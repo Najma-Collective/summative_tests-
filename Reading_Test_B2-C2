@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reading Proficiency Exam</title>
+    
+    <style>
+      :root {
+        --primary-sage: #7A8471;
+        --secondary-sage: #9CAF88;
+        --tertiary-sage: #B8C5A6;
+        --warm-cream: #F8F6F0;
+        --soft-white: #FEFCF7;
+        --forest-shadow: #5A6B52;
+        --border-sage: rgba(122, 132, 113, 0.2);
+        --hover-sage: rgba(156, 175, 136, 0.1);
+        --font-display: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        --font-body: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        min-height: 100vh;
+        font-family: var(--font-body);
+        background: var(--warm-cream);
+        color: var(--forest-shadow);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      #app-wrapper {
+          display: flex;
+          justify-content: center;
+          align-items: flex-start;
+          padding: 2rem;
+          box-sizing: border-box;
+          width: 100%;
+          min-height: 100vh;
+      }
+      #activity-container {
+        width: 100%;
+        max-width: 900px;
+        background: var(--soft-white);
+        padding: 48px;
+        border-radius: 20px;
+        border: 1px solid rgba(122, 132, 113, 0.12);
+        box-shadow: 0 10px 40px rgba(122, 132, 113, 0.1);
+        box-sizing: border-box;
+        position: relative;
+      }
+      .hidden {
+          display: none !important;
+      }
+      .screen.hidden {
+          display: none;
+      }
+      h1 {
+        font-family: var(--font-display);
+        font-size: 2.5rem;
+        color: var(--forest-shadow);
+        margin: 0 0 8px 0;
+        text-align: center;
+        font-weight: 600;
+      }
+      h2.rubric {
+          font-family: var(--font-body);
+          font-size: 1.1rem;
+          font-weight: 400;
+          color: var(--secondary-sage);
+          margin: 0 0 24px 0;
+          text-align: center;
+          line-height: 1.5;
+      }
+      h3 {
+          font-family: var(--font-display);
+          font-size: 1.5rem;
+          color: var(--forest-shadow);
+          margin: 24px 0 12px 0;
+      }
+      .activity-btn {
+          padding: 12px 24px;
+          border-radius: 12px;
+          border: 1px solid var(--primary-sage);
+          background-color: var(--primary-sage);
+          color: white;
+          font-weight: 600;
+          font-size: 1rem;
+          cursor: pointer;
+          transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+          -webkit-tap-highlight-color: transparent;
+          text-decoration: none;
+          display: inline-block;
+          box-shadow: 0 4px 12px rgba(122, 132, 113, 0.2);
+      }
+      .activity-btn:hover { 
+          background-color: var(--forest-shadow); 
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(90, 107, 82, 0.25);
+      }
+      .activity-btn:active {
+          transform: translateY(0px) scale(0.98);
+          box-shadow: 0 2px 8px rgba(122, 132, 113, 0.2);
+      }
+      .activity-btn:disabled {
+          background-color: var(--tertiary-sage);
+          border-color: var(--tertiary-sage);
+          cursor: not-allowed;
+          transform: none;
+          box-shadow: none;
+      }
+      .activity-btn.secondary {
+          background-color: transparent;
+          color: var(--primary-sage);
+          border-color: var(--tertiary-sage);
+          box-shadow: none;
+      }
+      .activity-btn.secondary:hover { 
+          background-color: var(--hover-sage); 
+          box-shadow: none;
+          transform: translateY(-1px);
+      }
+      input[type="text"], select {
+          width: 100%;
+          padding: 12px;
+          border-radius: 8px;
+          border: 1px solid var(--tertiary-sage);
+          font-size: 1rem;
+          font-family: var(--font-body);
+          box-sizing: border-box;
+          background-color: #fff;
+          color: var(--forest-shadow);
+          transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+      input[type="text"]:focus, select:focus {
+          outline: none;
+          border-color: var(--primary-sage);
+          box-shadow: 0 0 0 3px rgba(122, 132, 113, 0.15);
+      }
+      .controls {
+          margin-top: 32px;
+          text-align: center;
+      }
+      .test-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 16px;
+          font-weight: 600;
+          position: relative;
+      }
+      #save-indicator {
+          position: absolute;
+          top: 0;
+          left: 0;
+          font-size: 0.9rem;
+          color: var(--primary-sage);
+          opacity: 0;
+          transition: opacity 0.5s ease-out;
+      }
+      .progress-bar-container {
+          width: 100%;
+          height: 8px;
+          background-color: var(--border-sage);
+          border-radius: 4px;
+          overflow: hidden;
+      }
+      #progress-bar {
+          height: 100%;
+          width: 0%;
+          background-color: var(--primary-sage);
+          transition: width 0.4s ease;
+          background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+          background-size: 40px 40px;
+          animation: progress-bar-stripes 2s linear infinite;
+      }
+      @keyframes progress-bar-stripes {
+          from { background-position: 40px 0; }
+          to { background-position: 0 0; }
+      }
+      #progress-text {
+          text-align: right;
+          font-size: 0.9rem;
+          color: var(--secondary-sage);
+          margin-top: 8px;
+          margin-bottom: 24px;
+      }
+      .question-card {
+          padding: 24px;
+          border: 1px solid var(--border-sage);
+          border-radius: 16px;
+          margin-top: 24px;
+          background-color: var(--soft-white);
+          animation: fadeIn 0.5s ease-out forwards;
+      }
+      @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(15px); }
+          to { opacity: 1; transform: translateY(0); }
+      }
+      .question-header { margin-bottom: 16px; }
+      .question-text {
+          font-weight: 700;
+          font-size: 1.2rem;
+          color: var(--forest-shadow);
+          line-height: 1.4;
+      }
+      .options-container {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+      }
+      .option-label {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          cursor: pointer;
+          padding: 12px;
+          border-radius: 12px;
+          border: 2px solid transparent;
+          transition: background-color 0.2s, border-color 0.2s;
+          -webkit-tap-highlight-color: transparent;
+      }
+      .option-label:hover { background-color: var(--hover-sage); }
+      .option-label.selected {
+          border-color: var(--secondary-sage);
+          background-color: var(--hover-sage);
+      }
+      .option-label input[type="radio"] { display: none; }
+      .option-control {
+          flex-shrink: 0;
+          width: 24px;
+          height: 24px;
+          border: 2px solid var(--tertiary-sage);
+          background-color: var(--soft-white);
+          transition: all 0.2s ease;
+          position: relative;
+          border-radius: 50%;
+      }
+      .option-label.selected .option-control,
+      .option-label input[type="radio"]:checked + .option-control { 
+          border-color: var(--primary-sage); 
+      }
+      .option-label input[type="radio"]:checked + .option-control::after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 14px;
+          height: 14px;
+          border-radius: 50%;
+          background-color: var(--primary-sage);
+      }
+      .option-text { color: var(--primary-sage); line-height: 1.4; font-size: 1rem; }
+      .navigation-controls { margin-top: 32px; display: flex; justify-content: space-between; gap: 12px; }
+      .passage-box {
+        padding: 20px;
+        background-color: rgba(248, 246, 240, 0.7);
+        border: 1px solid var(--border-sage);
+        border-radius: 16px;
+        line-height: 1.6;
+        margin-bottom: 24px;
+      }
+      .passage-box h3 { margin-top: 0; }
+      .question-input-table {
+          width: 100%;
+          border-collapse: collapse;
+      }
+      .question-input-table td {
+          padding: 8px 4px;
+          vertical-align: middle;
+      }
+      .question-input-table td.table-label-cell {
+          width: 40%;
+          font-weight: 600;
+          color: var(--primary-sage);
+          padding-right: 16px;
+      }
+      .summary-completion-text p { line-height: 2; }
+      .summary-completion-text input[type="text"] {
+          width: 150px;
+          display: inline-block;
+          margin: 0 4px;
+          padding: 4px 8px;
+          font-size: 1rem;
+      }
+      #submission-code {
+          width: 100%;
+          height: 250px;
+          box-sizing: border-box;
+          margin: 12px 0;
+          font-family: monospace;
+          font-size: 0.9rem;
+          padding: 12px;
+          border: 1px solid var(--tertiary-sage);
+          border-radius: 8px;
+          background-color: var(--warm-cream);
+          color: var(--forest-shadow);
+      }
+      #submission-screen h3 { text-align: right; direction: rtl; }
+      .pulse-animation {
+        animation: pulse 1.5s infinite;
+      }
+      @keyframes pulse {
+        0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(122, 132, 113, 0.4); }
+        70% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(122, 132, 113, 0); }
+        100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(122, 132, 113, 0); }
+      }
+      @media (max-width: 767px) {
+          #app-wrapper { padding: 1rem; }
+          #activity-container { padding: 24px; }
+          h1 { font-size: 2rem; }
+          h2.rubric { font-size: 1rem; margin-bottom: 20px; }
+          .question-text { font-size: 1.1rem; }
+          .question-input-table td.table-label-cell { width: auto; display: block; padding-bottom: 4px; }
+          .question-input-table td { display: block; width: 100%; padding: 4px 0; }
+          .summary-completion-text input[type="text"] { width: 120px; }
+      }
+    </style>
+</head>
+<body>
+
+    <div id="app-wrapper">
+        <div id="activity-container">
+
+            <div id="welcome-screen" class="screen">
+                <h1>Exam 2: Independent & Proficient Reading (B2-C2)</h1>
+                <h2 class="rubric">Total Time: 90 Minutes. You will read three passages and answer 40 questions. Your progress will be saved automatically.</h2>
+                <div class="controls">
+                    <button id="start-btn" class="activity-btn">Start Test</button>
+                </div>
+            </div>
+
+            <div id="test-screen" class="screen hidden">
+                <div class="test-header">
+                    <span id="part-indicator">Part 1</span>
+                    <div id="save-indicator">Progress Saved</div>
+                </div>
+                <div class="progress-bar-container">
+                    <div id="progress-bar"></div>
+                </div>
+                <div id="progress-text">Step 1 of 6</div>
+                
+                <div id="passage-container"></div>
+                <div id="question-container"></div>
+
+                <div class="navigation-controls">
+                    <button id="back-btn" class="activity-btn secondary">Back</button>
+                    <button id="next-btn" class="activity-btn">Next</button>
+                    <button id="finish-btn" class="activity-btn hidden">Finish & Submit</button>
+                </div>
+            </div>
+            
+            <div id="submission-screen" class="screen hidden">
+                <h1>Test Complete</h1>
+                <h2 class="rubric">Please follow the steps below to submit your test.</h2>
+                
+                <h3 dir="rtl">الخطوة 1: انسخ نتائجك</h3>
+                <p dir="rtl">انقر فوق الزر لنسخ بيانات الاختبار الخاصة بك إلى الحافظة. إذا لم يعمل الزر، فيرجى تحديد كل النص أدناه ونسخه يدويًا.</p>
+                <textarea id="submission-code" readonly></textarea>
+                <button id="copy-submission-btn" class="activity-btn">Copy to Clipboard</button>
+                
+                <h3 dir="rtl">الخطوة 2: الصق النتائج في النموذج</h3>
+                <p dir="rtl">بعد النسخ، انقر فوق الزر أدناه للانتقال إلى نموذج Google. الصق بياناتك في الحقل المخصص.</p>
+                <a id="google-form-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSeqvd7f2jZEwVf_MqkjVSe_3BGB_ohLvR1psUY1k9zdFAdOgA/viewform?usp=header" target="_blank" class="activity-btn secondary" style="pointer-events: none; opacity: 0.5;">Go to Google Form</a>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const dom = {
+            welcomeScreen: document.getElementById('welcome-screen'),
+            testScreen: document.getElementById('test-screen'),
+            submissionScreen: document.getElementById('submission-screen'),
+            startBtn: document.getElementById('start-btn'),
+            nextBtn: document.getElementById('next-btn'),
+            backBtn: document.getElementById('back-btn'),
+            finishBtn: document.getElementById('finish-btn'),
+            partIndicator: document.getElementById('part-indicator'),
+            progressBar: document.getElementById('progress-bar'),
+            progressText: document.getElementById('progress-text'),
+            passageContainer: document.getElementById('passage-container'),
+            questionContainer: document.getElementById('question-container'),
+            copyBtn: document.getElementById('copy-submission-btn'),
+            formBtn: document.getElementById('google-form-btn'),
+            submissionCodeArea: document.getElementById('submission-code'),
+            saveIndicator: document.getElementById('save-indicator'),
+        };
+
+        const passages = {
+            passage1: `<h3>Biomimicry: Nature's Design Guide</h3><p>Humans have long looked to the natural world for inspiration, but the field of biomimicry takes this to a more scientific level. Rather than simply copying a shape from nature, biomimicry is a discipline that studies nature’s best ideas and then imitates these designs and processes to solve human problems. It operates on a simple but powerful principle: nature has already spent millions of years conducting research and development. The organisms we see today are the survivors, the ones that have found the most efficient and sustainable ways to live on Earth.</p><p>One of the most celebrated examples of biomimicry in action is the Shinkansen bullet train in Japan. The original models were incredibly fast, but they created a loud sonic boom every time they exited a tunnel, a significant noise pollution problem. Eiji Nakatsu, an engineer and birdwatcher, noticed that the kingfisher bird dives into water at high speed with very little splash. He realized the bird's long, pointed beak was shaped to move smoothly between two different mediums—air and water. The train's nose was redesigned to mimic the shape of the kingfisher's beak. The result was a quieter train that was also 10% faster and used 15% less electricity.</p><p>Another famous invention inspired by nature is Velcro. In 1941, Swiss engineer George de Mestral was walking his dog in the woods and noticed how burrs, the small seed pods from the burdock plant, clung stubbornly to his dog’s fur and his own trousers. Under a microscope, he saw that the burrs were covered in hundreds of tiny hooks that latched onto the loops in the fabric and fur. This observation led him to invent the now-ubiquitous hook-and-loop fastener, which he named Velcro.</p><p>The applications of biomimicry are vast and growing. Architects are designing buildings with ventilation systems inspired by the self-cooling mounds of termites in Africa, which maintain a stable internal temperature in extreme climates. Scientists are developing new adhesives by studying the feet of gecko lizards, which can stick to almost any surface. Others are creating more efficient solar panels by mimicking the way leaves on a tree arrange themselves to maximize sun exposure. By consciously learning from nature's genius, we can create a future that is more efficient, sustainable, and innovative.</p>`,
+            passage2: `<h3>The Puzzle of Cognitive Dissonance</h3><p><b>A</b> In social psychology, few theories are as influential as cognitive dissonance. Proposed by Leon Festinger in 1957, it addresses the mental discomfort resulting from holding conflicting beliefs, values, or attitudes. For example, a person who believes environmental protection is important but drives a fuel-inefficient car will likely experience this. This discomfort, Festinger argued, is a powerful motivator, compelling the individual to reduce the inconsistency.</p><p><b>B</b> This drive can lead to changes in attitudes or behaviors. The person could sell their car (changing behavior) or, alternatively, downplay their individual impact on the environment (changing attitude). The path of least resistance is often taken; it is frequently easier to change our beliefs than our behavior.</p><p><b>C</b> One of Festinger’s classic experiments illustrates this. Participants performed extremely dull tasks for an hour. Afterwards, they were asked to tell the next person (secretly a researcher) that the tasks were very interesting. One group was paid $1 for this lie; another was paid $20.</p><p><b>D</b> Counterintuitively, those paid $1 later rated the tasks as more enjoyable than those paid $20. The $20 group had a clear external justification for their lie: the money. They experienced little dissonance. However, the $1 group had insufficient justification. The conflict between their action (lying) and belief (the task was dull) created significant dissonance. To resolve this, they unconsciously changed their attitude, convincing themselves the tasks were not so bad.</p><p><b>E</b> However, the theory is not without its critics. Some psychologists, particularly proponents of Self-Perception Theory, argue that no internal state of 'dissonance' is required to explain the results. They suggest that people simply infer their attitudes from their own behavior. The $1 participant, observing themselves lying for no good reason, might think, "I must have found it more interesting than I thought, otherwise why would I have said so?" In this view, people are not resolving conflict, but rather constructing their beliefs based on their actions, much like an external observer would.</p><p><b>F</b> Despite such debates, understanding cognitive dissonance has wide-ranging implications. It helps explain why people continue unhealthy behaviors, often by downplaying the risks. It clarifies why we value more highly things for which we have struggled. The theory reveals that humans are not always rational beings, but rationalizing beings, driven to create a narrative of consistency between who we think we are and what we do.</p>`,
+            passage3: `<h3>Language and Thought: The Sapir-Whorf Hypothesis</h3><p><b>A.</b> Does the language you speak shape the way you think? This question is at the heart of the principle of linguistic relativity, a concept most famously associated with the linguists Edward Sapir and his student Benjamin Lee Whorf. The Sapir-Whorf hypothesis, as it came to be known, posits that structural differences between languages are reflected in the different ways their speakers perceive and conceptualize the world. It exists in two main forms: a 'strong' version, linguistic determinism, and a 'weak' version, linguistic relativity.</p><p><b>B.</b> Linguistic determinism is the more radical idea that our language entirely dictates our thought. It implies that cognitive categories are defined and limited by one's native tongue. If a language lacks a word for a concept, its speakers would be unable to understand that concept. Whorf's early work with the Hopi, a Native American language, famously claimed that the Hopi language has no words or grammatical constructions that refer to the passage of time. He contended that, as a result, the Hopi people have a fundamentally different conception of time.</p><p><b>C.</b> However, this strong deterministic view has been largely discredited. Critics have pointed out that Whorf's analysis of the Hopi language was flawed and that it is possible to translate concepts between languages, even if one lacks a specific single word for it. We can all understand the German concept of 'Schadenfreude' (taking pleasure in another's misfortune) even though English lacks a direct equivalent. This cross-linguistic understanding challenges the idea that thought is impossible without specific linguistic tools.</p><p><b>D.</b> The 'weak' version of the hypothesis, linguistic relativity, is more widely accepted today. It suggests not that language determines thought, but that it influences it. The language we speak can highlight certain aspects of reality, making us more attuned to particular categories. A classic example is color perception. While early research showed that speakers of languages with few color terms could still physically distinguish between colors, later, more nuanced studies have shown that having specific terms makes people faster and more accurate at recalling or re-identifying specific shades.</p><p><b>E.</b> More recent empirical research provides further support for this moderate position. Lera Boroditsky's work with the Kuuk Thaayorre, an Aboriginal community in Australia, has shown how language can shape fundamental concepts like space. Instead of using relative terms like 'left' and 'right', they use absolute cardinal directions (north, south, east, west). This linguistic habit requires them to be constantly aware of their orientation in space, a cognitive skill that speakers of English do not need to maintain.</p><p><b>F.</b> Ultimately, the debate reveals a complex interplay between language and cognition. While the notion that language completely controls thought is no longer supported, it is clear that it is not a neutral medium. The language we speak provides a framework, a lens through which we experience reality. It can shape our habits of mind and attune us to patterns in the world we might otherwise ignore, providing compelling evidence that language has a significant, though not absolute, influence on our cognitive processes.</p>`
+        };
+        
+        const answerKey = {
+            1: "A", 2: "B", 3: "A", 4: "C", 5: "B", 6: "A", 7: "C", 
+            8: "problems", 9: "research", 10: "loud", 11: "hooks", 12: "ventilation", 13: "sustainable",
+            14: "A", 15: "C", 16: "E", 17: "B", 18: "F", 19: "D",
+            20: "YES", 21: "NO", 22: "NO", 23: "NO", 24: "YES", 25: "NO", 26: "YES",
+            27: "iii", 28: "vii", 29: "ii", 30: "iv", 31: "vi", 32: "v",
+            33: "B", 34: "E", 35: "F", 36: "A", 37: "G", 38: "C", 39: "H", 40: "D"
+        };
+
+        const examData = [
+            // Part 1
+            { part: 1, type: 'matching-features', questionText: 'Questions 1-7: Look at the following statements and the list of natural examples below. Match each statement with the correct example, A, B, or C.', passage: passages.passage1, items: [ { id: 1, text: 'Its design helped to reduce noise pollution.' }, { id: 2, text: 'Its structure was revealed with the help of a microscope.' }, { id: 3, text: 'Its design led to a product that was more energy-efficient.' }, { id: 4, text: 'It is being studied to help buildings regulate their own temperature.' }, { id: 5, text: 'It inspired a fastening device for clothing and other items.' }, { id: 6, text: 'Its shape was effective at moving between air and water.' }, { id: 7, text: 'It is helping to improve the generation of solar power.' } ], options: ['A. The Kingfisher', 'B. The Burdock Plant', 'C. Other examples mentioned in the final paragraph'] },
+            { part: 1, type: 'sentence-completion-word', questionText: 'Questions 8-13: Complete the sentences below. Choose ONE WORD ONLY from the passage for each answer.', passage: passages.passage1, items: [ { id: 8, text: 'Biomimicry aims to imitate nature\'s designs to solve human %%.' }, { id: 9, text: 'The principle of biomimicry is based on the idea that nature has conducted millions of years of %%.' }, { id: 10, text: 'The original bullet train was very fast but also very %%.' }, { id: 11, text: 'George de Mestral noticed that the burrs were covered in tiny %% that attached to fabric.' }, { id: 12, text: 'Architects are copying termite mounds to improve building %% systems.' }, { id: 13, text: 'By learning from nature\'s genius, humans can create a more %% future.' } ] },
+            // Part 2
+            { part: 2, type: 'matching-information', questionText: 'Questions 14-19: The passage has six paragraphs, A-F. Which paragraph contains the following information?', passage: passages.passage2, items: [ { id: 14, text: 'a definition of the central theory and an everyday example' }, { id: 15, text: 'a description of the methodology of a specific research study' }, { id: 16, text: 'an alternative explanation for the experimental results' }, { id: 17, text: 'an outline of two possible ways to decrease the feeling of mental discomfort' }, { id: 18, text: 'a conclusion about the human need to appear consistent' }, { id: 19, text: 'an explanation for why one group of participants felt less internal conflict than the other' } ], options: ['A', 'B', 'C', 'D', 'E', 'F'] },
+            { part: 2, type: 'yes-no-ng', questionText: 'Questions 20-26: Do the following statements agree with the claims of the writer in the passage?', passage: passages.passage2, items: [ { id: 20, text: 'The writer believes cognitive dissonance is a major theory in its field.' }, { id: 21, text: 'The writer claims that people usually choose to change their behavior to reduce dissonance.' }, { id: 22, text: 'The writer finds the results of Festinger\'s experiment to be predictable.' }, { id: 23, text: 'Self-Perception Theory provides the only logical explanation for Festinger\'s findings.' }, { id: 24, text: 'The writer presents Self-Perception Theory as a competing viewpoint to cognitive dissonance.' }, { id: 25, text: 'The writer concludes that cognitive dissonance is a useless theory for explaining human behavior.' }, { id: 26, text: 'The writer believes that humans are primarily driven by the need to rationalize their actions.' } ] },
+            // Part 3
+            { part: 3, type: 'matching-headings', questionText: 'Questions 27-32: The passage has six paragraphs, A-F. Choose the correct heading for each paragraph from the list of headings below.', passage: passages.passage3, items: [ { id: 27, label: 'Paragraph A' }, { id: 28, label: 'Paragraph B' }, { id: 29, label: 'Paragraph C' }, { id: 30, label: 'Paragraph D' }, { id: 31, label: 'Paragraph E' }, { id: 32, label: 'Paragraph F' } ], options: [ {val: 'i', text: 'Modern evidence for a moderate influence'}, {val: 'ii', text: 'The rejection of a radical theory'}, {val: 'iii', text: 'Defining the two versions of the hypothesis'}, {val: 'iv', text: 'The ongoing debate about color words'}, {val: 'v', text: 'A concluding summary of the relationship'}, {val: 'vi', text: 'An example of language shaping spatial awareness'}, {val: 'vii', text: 'The original argument for thought being controlled by language'} ] },
+            { part: 3, type: 'matching-sentence-endings', questionText: 'Questions 33-40: Complete each sentence with the correct ending, A-H, below.', passage: passages.passage3, items: [ { id: 33, text: 'The central idea of the Sapir-Whorf hypothesis is that' }, { id: 34, text: 'The theory of linguistic determinism suggests that' }, { id: 35, text: 'The author mentions \'Schadenfreude\' to illustrate that' }, { id: 36, text: 'Modern research into color perception indicates that' }, { id: 37, text: 'The language of the Kuuk Thaayorre requires its speakers to' }, { id: 38, text: 'Critics of Whorf\'s early work argued that' }, { id: 39, text: 'The more accepted, \'weak\' version of the hypothesis argues that' }, { id: 40, text: 'The writer\'s overall conclusion is that language' } ], options: [ {val: 'A', text: 'language can affect the efficiency of certain cognitive tasks.'}, {val: 'B', text: 'people\'s understanding of the world is connected to the language they speak.'}, {val: 'C', text: 'his interpretations of the Hopi language were incorrect.'}, {val: 'D', text: 'has a powerful but not a total impact on how we think.'}, {val: 'E', text: 'people cannot comprehend ideas for which their language has no specific words.'}, {val: 'F', text: 'concepts can be understood even without a single dedicated term.'}, {val: 'G', text: 'be continuously aware of their geographical position.'}, {val: 'H', text: 'language has an influential rather than a controlling role in thought.'} ] }
+        ];
+        
+        const totalQuestions = 40;
+        let state = {
+            currentIndex: 0,
+            answers: {}
+        };
+        let saveIndicatorTimeout;
+
+        const debounce = (func, delay) => {
+            let timeoutId;
+            return (...args) => {
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => {
+                    func.apply(this, args);
+                }, delay);
+            };
+        };
+
+        const renderQuestion = () => {
+            dom.passageContainer.innerHTML = '';
+            dom.questionContainer.innerHTML = '';
+            
+            const questionBlock = examData[state.currentIndex];
+
+            if (!questionBlock || !Array.isArray(questionBlock.items)) {
+                console.error('Error: Invalid question data at index', state.currentIndex, questionBlock);
+                dom.questionContainer.innerHTML = '<p>An error occurred while loading this question. Please contact support.</p>';
+                return;
+            }
+
+            if (questionBlock.passage) {
+                dom.passageContainer.innerHTML = `<div class="passage-box">${questionBlock.passage}</div>`;
+            }
+
+            let html = `<div class="question-card"><div class="question-header"><p class="question-text">${questionBlock.questionText}</p></div><div class="options-container">`;
+
+            // Display options list for matching types
+            if (questionBlock.type === 'matching-features' || questionBlock.type === 'matching-headings' || questionBlock.type === 'matching-sentence-endings') {
+                html += '<h4>List of Options</h4><ul style="padding-left: 20px; margin-bottom: 24px;">';
+                questionBlock.options.forEach(opt => {
+                    html += `<li><b>${opt.val || opt.split('.')[0]}:</b> ${opt.text || opt.substring(opt.indexOf('.') + 1)}</li>`;
+                });
+                html += '</ul>';
+            }
+
+
+            switch (questionBlock.type) {
+                case 'matching-features':
+                case 'matching-information':
+                case 'matching-headings':
+                case 'matching-sentence-endings':
+                    html += `<table class="question-input-table"><tbody>`;
+                    questionBlock.items.forEach(item => {
+                        const savedValue = state.answers[item.id] || '';
+                        html += `<tr>
+                                    <td class="table-label-cell">
+                                        <label for="q-${item.id}">${item.id}. ${item.label || item.text}</label>
+                                    </td>
+                                    <td>
+                                        <select id="q-${item.id}" data-question-id="${item.id}">
+                                            <option value="">Select...</option>`;
+                        questionBlock.options.forEach(opt => {
+                             const optionValue = opt.val || opt.split('.')[0];
+                             html += `<option value="${optionValue}" ${savedValue === optionValue ? 'selected' : ''}>${optionValue}</option>`;
+                        });
+                        html += `</select>
+                                    </td>
+                                 </tr>`;
+                    });
+                    html += `</tbody></table>`;
+                    break;
+                case 'sentence-completion-word':
+                    html += `<table class="question-input-table"><tbody>`;
+                    questionBlock.items.forEach(item => {
+                        const savedValue = state.answers[item.id] || '';
+                        const parts = item.text.split('%%');
+                        const labelHtml = `${item.id}. ${parts[0]}<input type="text" id="q-${item.id}" data-question-id="${item.id}" value="${savedValue}" style="width:150px; display:inline-block; margin: 0 4px;">${parts[1] || ''}`;
+                        html += `<tr><td style="line-height: 2.5;">${labelHtml}</td></tr>`;
+                    });
+                    html += `</tbody></table>`;
+                    break;
+                case 'yes-no-ng':
+                    questionBlock.items.forEach(item => {
+                        html += `<p style="margin-top: 20px; font-weight: 600;">${item.id}. ${item.text}</p>`;
+                        const options = ['YES', 'NO', 'NOT GIVEN'];
+                        options.forEach(option => {
+                            const isChecked = state.answers[item.id] === option;
+                            const selectedClass = isChecked ? 'selected' : '';
+                            html += `
+                                <label class="option-label ${selectedClass}">
+                                    <input type="radio" name="q-${item.id}" value="${option}" data-question-id="${item.id}" ${isChecked ? 'checked' : ''}>
+                                    <span class="option-control"></span>
+                                    <span class="option-text">${option}</span>
+                                </label>`;
+                        });
+                    });
+                    break;
+            }
+            html += `</div></div>`;
+            dom.questionContainer.innerHTML = html;
+            updateUI();
+        };
+
+        const updateUI = () => {
+            const isLastQuestion = state.currentIndex === examData.length - 1;
+            
+            dom.partIndicator.textContent = `Part ${examData[state.currentIndex].part}`;
+            dom.progressText.textContent = `Step ${state.currentIndex + 1} of ${examData.length}`;
+            dom.progressBar.style.width = `${((state.currentIndex + 1) / examData.length) * 100}%`;
+
+            dom.backBtn.disabled = state.currentIndex === 0;
+
+            dom.nextBtn.classList.toggle('hidden', isLastQuestion);
+            dom.finishBtn.classList.toggle('hidden', !isLastQuestion);
+        };
+
+        const showSaveIndicator = () => {
+            clearTimeout(saveIndicatorTimeout);
+            dom.saveIndicator.style.opacity = '1';
+            saveIndicatorTimeout = setTimeout(() => {
+                dom.saveIndicator.style.opacity = '0';
+            }, 1500);
+        };
+        
+        const saveProgress = () => {
+             try {
+                localStorage.setItem('examProgress', JSON.stringify(state));
+                showSaveIndicator();
+            } catch (e) {
+                console.error("Could not save progress to localStorage.", e);
+            }
+        };
+
+        const debouncedSave = debounce(saveProgress, 500);
+
+        const handleInputChange = (id, value, targetElement) => {
+            state.answers[id] = value;
+
+            if (targetElement && targetElement.type === 'radio') {
+                const name = targetElement.name;
+                document.querySelectorAll(`input[name="${name}"]`).forEach(radio => {
+                    radio.parentElement.classList.remove('selected');
+                });
+                targetElement.parentElement.classList.add('selected');
+                saveProgress(); 
+            } else {
+                debouncedSave();
+            }
+        };
+        
+        const setupEventListeners = () => {
+            dom.questionContainer.addEventListener('change', (event) => {
+                const target = event.target;
+                const questionId = target.dataset.questionId;
+                if (questionId && (target.tagName === 'SELECT' || target.type === 'radio')) {
+                    handleInputChange(questionId, target.value, target);
+                }
+            });
+            dom.questionContainer.addEventListener('input', (event) => {
+                const target = event.target;
+                const questionId = target.dataset.questionId;
+                if (questionId && target.type === 'text') {
+                    handleInputChange(questionId, target.value.trim(), target);
+                }
+            });
+        };
+
+        const loadProgress = () => {
+            try {
+                const saved = localStorage.getItem('examProgress');
+                if (saved) {
+                    state = JSON.parse(saved);
+                }
+            } catch(e) {
+                console.error("Could not load progress from localStorage. Resetting state.", e);
+                state = { currentIndex: 0, answers: {} };
+            }
+        };
+
+        const goToNext = () => {
+            if (state.currentIndex < examData.length - 1) {
+                state.currentIndex++;
+                renderQuestion();
+                window.scrollTo(0, 0);
+            }
+        };
+
+        const goToBack = () => {
+            if (state.currentIndex > 0) {
+                state.currentIndex--;
+                renderQuestion();
+                window.scrollTo(0, 0);
+            }
+        };
+
+        const startTest = () => {
+            dom.welcomeScreen.classList.add('hidden');
+            dom.testScreen.classList.remove('hidden');
+            renderQuestion();
+        };
+
+        const finishTest = () => {
+            let csvData = "Question,Answer\n";
+            for (let i = 1; i <= totalQuestions; i++) {
+                const answer = state.answers[i] || "NO_ANSWER";
+                const sanitizedAnswer = String(answer).replace(/"/g, '""');
+                csvData += `${i},"${sanitizedAnswer}"\n`;
+            }
+            
+            dom.submissionCodeArea.value = csvData;
+            dom.testScreen.classList.add('hidden');
+            dom.submissionScreen.classList.remove('hidden');
+            dom.copyBtn.classList.add('pulse-animation');
+        };
+
+        const copyResults = () => {
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(dom.submissionCodeArea.value).then(() => {
+                    dom.copyBtn.textContent = "Copied!";
+                    dom.copyBtn.classList.remove('pulse-animation');
+                    dom.formBtn.style.opacity = '1';
+                    dom.formBtn.style.pointerEvents = 'auto';
+                    dom.formBtn.classList.add('pulse-animation');
+                }).catch(err => {
+                    alert('Automatic copy failed. Please select the text and copy it manually.');
+                });
+            } else {
+                 alert('Automatic copy is not available. Please select the text and copy it manually.');
+            }
+        };
+        
+        dom.startBtn.addEventListener('click', startTest);
+        dom.nextBtn.addEventListener('click', goToNext);
+        dom.backBtn.addEventListener('click', goToBack);
+        dom.finishBtn.addEventListener('click', finishTest);
+        dom.copyBtn.addEventListener('click', copyResults);
+        
+        loadProgress();
+        setupEventListeners();
+    });
+    </script>
+</body>
+</html>

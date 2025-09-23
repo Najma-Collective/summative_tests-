@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Practice – A1</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;700;800&family=Questrial&display=swap" rel="stylesheet">
+    <style>
+        /* =====================================================================
+           Organic Sage UI — Mobile-first, stable, and soothing
+           Palette preserved; accessibility + mobile ergonomics improved.
+           ===================================================================== */
+
+        /* -------------------------------
+           Design tokens
+        ----------------------------------*/
+        :root {
+          /* Core palette (yours, kept) */
+          --primary-sage: #7A8471;
+          --secondary-sage: #9CAF88;
+          --tertiary-sage: #B8C5A6;
+          --warm-cream: #F8F6F0;
+          --soft-white: #FEFCF7;
+          --forest-shadow: #5A6B52;
+          --border-sage: rgba(122, 132, 113, 0.20);
+          --hover-sage: rgba(156, 175, 136, 0.15);
+
+          /* Extended palette for depth */
+          --deep-forest: #3E4A3A;
+          --moss: #6E7A67;
+          --fern: #8FA081;
+          --dried-clay: #D9CDB4;
+          --amber: #C6AA77;
+          --ink: #2F3A2B;
+          --ink-muted: #5A6B52;
+
+          /* Typography */
+          --font-display: 'Questrial', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, sans-serif;
+          --font-body: 'Nunito', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+          /* Fluid typography scale */
+          --step--1: clamp(0.875rem, 0.84rem + 0.15vw, 0.95rem);
+          --step-0:  clamp(1rem,     0.96rem + 0.22vw, 1.1rem);
+          --step-1:  clamp(1.125rem, 1.07rem + 0.35vw, 1.3rem);
+          --step-2:  clamp(1.375rem, 1.28rem + 0.55vw, 1.6rem);
+          --step-3:  clamp(1.75rem,  1.58rem + 0.95vw, 2.1rem);
+          --step-4:  clamp(2.25rem,  1.98rem + 1.35vw, 2.7rem);
+
+          /* Rhythm */
+          --space-1: 0.25rem;
+          --space-2: 0.5rem;
+          --space-3: 0.75rem;
+          --space-4: 1rem;
+          --space-5: 1.25rem;
+          --space-6: 1.5rem;
+          --space-7: 2rem;
+          --space-8: 2.5rem;
+          --space-9: 3rem;
+
+          /* Shape + elevation */
+          --radius-sm: 10px;
+          --radius: 16px;
+          --radius-lg: 20px;
+          --radius-xl: 28px;
+
+          --shadow-1: 0 1px 2px rgba(34, 41, 32, 0.05), 0 2px 8px rgba(34, 41, 32, 0.06);
+          --shadow-2: 0 4px 18px rgba(34, 41, 32, 0.08), 0 12px 28px rgba(34, 41, 32, 0.06);
+          --shadow-3: 0 10px 40px rgba(34, 41, 32, 0.10), 0 20px 60px rgba(34, 41, 32, 0.08);
+
+          /* Focus ring (AA contrast on cream/white) */
+          --ring: 0 0 0 3px color-mix(in oklab, var(--soft-white) 60%, transparent), 0 0 0 5px color-mix(in srgb, var(--secondary-sage), #2F3A2B 15%);
+
+          /* Motion */
+          --ease-ambient: cubic-bezier(.2,.8,.2,1);
+          --dur-1: 120ms;
+          --dur-2: 200ms;
+          --dur-3: 320ms;
+
+          /* Mobile-safe touch target */
+          --target-min: 44px;
+
+          /* Container max */
+          --container-max: 900px;
+        }
+
+        /* -------------------------------
+           Global reset / mobile stability
+        ----------------------------------*/
+        *,
+        *::before,
+        *::after {
+          box-sizing: border-box;
+        }
+
+        html {
+          -webkit-text-size-adjust: 100%; /* iOS font scaling fix */
+          text-size-adjust: 100%;
+          hanging-punctuation: first last;
+        }
+
+        html, body {
+          margin: 0;
+          padding: 0;
+          width: 100%;
+          min-height: 100dvh; /* mobile address bar safe */
+          font-family: var(--font-body);
+          font-size: var(--step-0);
+          line-height: 1.6;
+          color: var(--forest-shadow);
+          background:
+            radial-gradient(1200px 1200px at -10% -10%, #FFFFFF 0%, transparent 50%),
+            radial-gradient(1200px 1000px at 110% 10%, #FFF8F0 0%, transparent 50%),
+            linear-gradient(135deg, #F8F6F0 0%, #F5F3ED 100%);
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+          text-rendering: optimizeLegibility;
+          overflow-x: hidden;
+        }
+
+        @media (prefers-reduced-motion: no-preference) {
+          html { scroll-behavior: smooth; }
+        }
+
+        /* Better text wrapping on small screens */
+        :where(p, h1, h2, h3, h4, h5, h6) {
+          text-wrap: pretty;
+          overflow-wrap: anywhere;
+        }
+
+        /* Media defaults */
+        img, svg, video, canvas, audio, iframe {
+          display: block;
+          max-width: 100%;
+          height: auto;
+        }
+
+        /* Links */
+        a { color: var(--primary-sage); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+        a:hover { color: var(--deep-forest); }
+
+        /* Utility: hide but readable for screen readers */
+        .visually-hidden {
+          position: absolute !important;
+          height: 1px; width: 1px;
+          overflow: hidden; clip: rect(1px, 1px, 1px, 1px);
+          white-space: nowrap;
+        }
+
+        /* -------------------------------
+           App shell
+        ----------------------------------*/
+        #app-wrapper {
+          display: flex;
+          justify-content: center;
+          align-items: flex-start;
+          padding: max(var(--space-7), env(safe-area-inset-top)) var(--space-4) var(--space-7);
+          width: 100%;
+          min-height: 100dvh;
+          background:
+            radial-gradient(800px 600px at 20% 0%, rgba(156,175,136,0.08) 0%, transparent 70%),
+            radial-gradient(700px 500px at 80% 100%, rgba(90,107,82,0.06) 0%, transparent 65%);
+        }
+
+        /* Container gets subtle translucency on capable browsers */
+        #activity-container {
+          width: 100%;
+          max-width: var(--container-max);
+          background: color-mix(in srgb, var(--soft-white) 88%, white 12%);
+          padding: clamp(24px, 3.2vw, 48px);
+          border-radius: var(--radius-lg);
+          border: 1px solid rgba(122, 132, 113, 0.12);
+          box-shadow: var(--shadow-2);
+          position: relative;
+          isolation: isolate;
+          container-type: inline-size; /* enables container queries where supported */
+        }
+
+        @supports (backdrop-filter: blur(6px)) {
+          #activity-container {
+            background: color-mix(in srgb, var(--soft-white) 76%, white 24%);
+            backdrop-filter: blur(6px) saturate(1.02);
+          }
+        }
+
+        /* Decorative organic edge glow (soft + subtle) */
+        #activity-container::before {
+          content: "";
+          position: absolute;
+          inset: -1px;
+          border-radius: inherit;
+          background:
+            radial-gradient(1200px 200px at 50% -5%, rgba(156,175,136,0.12), transparent 60%),
+            radial-gradient(800px 1000px at 50% 110%, rgba(122,132,113,0.08), transparent 70%);
+          z-index: -1;
+          pointer-events: none;
+        }
+
+        /* Hide screens when needed */
+        .screen.hidden { display: none !important; }
+
+        /* -------------------------------
+           Headings / text
+        ----------------------------------*/
+        h1 {
+          font-family: var(--font-display);
+          font-size: var(--step-4);
+          letter-spacing: 0.2px;
+          color: var(--forest-shadow);
+          margin: 0 0 var(--space-2) 0;
+          text-align: center;
+        }
+
+        h2.rubric {
+          font-family: var(--font-body);
+          font-size: var(--step-0);
+          font-weight: 500;
+          color: var(--secondary-sage);
+          margin: 0 0 var(--space-6) 0;
+          text-align: center;
+          line-height: 1.5;
+        }
+
+        h3 {
+          font-family: var(--font-display);
+          font-size: var(--step-2);
+          color: var(--forest-shadow);
+          margin: var(--space-6) 0 var(--space-3) 0;
+        }
+
+        /* -------------------------------
+           Buttons
+        ----------------------------------*/
+        .activity-btn {
+          min-height: var(--target-min);
+          padding: 12px 20px;
+          border-radius: 12px;
+          border: 1px solid var(--primary-sage);
+          background: linear-gradient(180deg, color-mix(in srgb, var(--primary-sage) 92%, white 8%), var(--primary-sage));
+          color: #fff;
+          font-weight: 700;
+          font-size: 1rem;
+          letter-spacing: 0.2px;
+          cursor: pointer;
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          -webkit-tap-highlight-color: transparent;
+          touch-action: manipulation;
+          user-select: none;
+          transition: transform var(--dur-1) var(--ease-ambient), box-shadow var(--dur-2) var(--ease-ambient), background var(--dur-2) var(--ease-ambient), border-color var(--dur-2) var(--ease-ambient), opacity var(--dur-1) var(--ease-ambient);
+          box-shadow: 0 1px 0 rgba(255,255,255,0.25) inset, 0 8px 16px rgba(90, 107, 82, 0.20);
+        }
+
+        .activity-btn:hover {
+          background: linear-gradient(180deg, color-mix(in srgb, var(--forest-shadow) 92%, white 8%), var(--forest-shadow));
+          transform: translateY(-1px);
+          box-shadow: 0 1px 0 rgba(255,255,255,0.25) inset, 0 10px 20px rgba(90, 107, 82, 0.22);
+        }
+
+        .activity-btn:active {
+          transform: translateY(0);
+          box-shadow: 0 1px 0 rgba(255,255,255,0.2) inset, 0 4px 10px rgba(90, 107, 82, 0.20);
+        }
+
+        .activity-btn:focus-visible {
+          outline: none;
+          box-shadow: var(--ring), 0 8px 16px rgba(90, 107, 82, 0.20);
+        }
+
+        .activity-btn:disabled,
+        .activity-btn[disabled] {
+          background: var(--tertiary-sage);
+          border-color: var(--tertiary-sage);
+          color: color-mix(in srgb, #fff 70%, var(--soft-white) 30%);
+          cursor: not-allowed;
+          opacity: 0.8;
+          transform: none;
+          box-shadow: none;
+        }
+
+        /* Secondary variant */
+        .activity-btn.secondary {
+          background: transparent;
+          color: var(--primary-sage);
+          border-color: color-mix(in srgb, var(--tertiary-sage) 70%, var(--primary-sage) 30%);
+          box-shadow: none;
+        }
+
+        .activity-btn.secondary:hover { background-color: var(--hover-sage); }
+
+        .activity-btn.secondary:focus-visible {
+          outline: none;
+          box-shadow: var(--ring);
+        }
+
+        /* Button group alignment on small screens */
+        .controls {
+          margin-top: var(--space-7);
+          text-align: center;
+          display: grid;
+          gap: var(--space-3);
+          grid-auto-flow: row;
+        }
+
+        /* -------------------------------
+           Forms / inputs
+        ----------------------------------*/
+        .input-group { margin: var(--space-6) 0; }
+
+        .input-group label {
+          display: block;
+          font-weight: 700;
+          margin-bottom: var(--space-2);
+          color: var(--primary-sage);
+          letter-spacing: 0.2px;
+        }
+        
+        .fill-in-blank-input {
+            width: 140px;
+            display: inline-block;
+            margin: 0 4px;
+            padding: 4px 8px;
+            font-size: 0.95rem;
+            vertical-align: baseline;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        textarea,
+        select {
+          width: 100%;
+          min-height: var(--target-min);
+          padding: 12px 14px;
+          border-radius: 10px;
+          border: 1px solid var(--tertiary-sage);
+          background: #fff;
+          font-size: 1rem;
+          font-family: var(--font-body);
+          color: var(--ink);
+          box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset;
+          appearance: none;
+          -webkit-appearance: none;
+          transition: border-color var(--dur-2) var(--ease-ambient), box-shadow var(--dur-2) var(--ease-ambient), background var(--dur-2) var(--ease-ambient);
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+          color: color-mix(in srgb, var(--ink-muted) 60%, #fff 40%);
+          opacity: 0.9;
+        }
+
+        input:focus-visible,
+        textarea:focus-visible,
+        select:focus-visible {
+          outline: none;
+          border-color: var(--secondary-sage);
+          box-shadow: var(--ring);
+          background: color-mix(in srgb, #fff 92%, var(--warm-cream) 8%);
+        }
+
+        input:disabled,
+        textarea:disabled,
+        select:disabled {
+          background: color-mix(in srgb, #fff 85%, var(--warm-cream) 15%);
+          color: var(--ink-muted);
+          cursor: not-allowed;
+        }
+
+        /* Date input caret/tap stability on iOS */
+        input[type="date"] {
+          -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Textareas */
+        textarea {
+          resize: vertical;
+        }
+
+        /* Accent color for native radios/checkboxes (fallback when custom not active) */
+        :root { accent-color: var(--primary-sage); }
+
+        /* -------------------------------
+           System Check Screen
+        ----------------------------------*/
+        .system-check-step { margin-bottom: var(--space-7); }
+
+        #code-display-area {
+          display: flex;
+          align-items: center;
+          gap: var(--space-3);
+          margin-top: var(--space-3);
+          flex-wrap: wrap; /* safer on mobile */
+        }
+
+        #generated-code {
+          width: 100%;
+          min-height: 100px;
+          height: 120px;
+          resize: vertical;
+          font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+          font-size: 0.95rem;
+          line-height: 1.45;
+          padding: 12px 14px;
+          border-radius: 10px;
+          border: 1px solid var(--tertiary-sage);
+          background: #fff;
+          color: var(--ink);
+        }
+
+        #paste-target { margin-top: var(--space-3); }
+
+        #paste-success-msg {
+          color: #2E7D32;
+          font-weight: 800;
+          margin-top: var(--space-2);
+        }
+
+        /* -------------------------------
+           Level Select Screen
+        ----------------------------------*/
+        .level-buttons {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+          gap: var(--space-4);
+          margin-top: var(--space-7);
+        }
+
+        /* Nice tactile card-y buttons inside level grid (opt-in via .activity-btn) */
+        .level-buttons .activity-btn {
+          width: 100%;
+        }
+
+        /* -------------------------------
+           Test Screen
+        ----------------------------------*/
+        .test-header {
+          display: grid;
+          grid-template-columns: auto 1fr auto;
+          align-items: center;
+          gap: var(--space-4);
+          margin-bottom: var(--space-4);
+          font-weight: 700;
+        }
+
+        #current-level { color: var(--secondary-sage); }
+        #timer { font-size: 1.1rem; color: var(--primary-sage); text-align: right; }
+
+        .progress-bar-container {
+          width: 100%;
+          height: 10px;
+          background-color: var(--border-sage);
+          border-radius: 999px;
+          overflow: hidden;
+        }
+
+        #progress-bar {
+          height: 100%;
+          width: 0%;
+          background: linear-gradient(90deg, var(--primary-sage), color-mix(in srgb, var(--secondary-sage) 60%, var(--primary-sage) 40%));
+          transition: width var(--dur-3) var(--ease-ambient);
+        }
+
+        #progress-text {
+          text-align: right;
+          font-size: 0.9rem;
+          color: var(--secondary-sage);
+          margin-top: var(--space-2);
+          margin-bottom: var(--space-6);
+        }
+        
+        .passage-slide.hidden { display: none; }
+
+        .mc-question {
+          padding: 20px;
+          margin-top: var(--space-6);
+          border: 1px solid var(--border-sage);
+          border-radius: 16px;
+          background: linear-gradient(180deg, #ffffff 0%, color-mix(in srgb, #ffffff 92%, var(--warm-cream) 8%));
+          box-shadow: var(--shadow-1);
+        }
+
+        .mc-question-header { margin-bottom: var(--space-4); }
+
+        .mc-question-text {
+          font-weight: 800;
+          font-size: var(--step-1);
+          color: var(--forest-shadow);
+          line-height: 1.45;
+        }
+
+        /* Options */
+        .mc-options-container {
+          display: flex;
+          flex-direction: column;
+          gap: var(--space-3);
+          margin-top: var(--space-4);
+        }
+
+        .mc-option-item input { display: none; }
+
+        .mc-option-label {
+          display: flex;
+          align-items: center;
+          gap: var(--space-3);
+          cursor: pointer;
+          padding: 12px;
+          border-radius: 10px;
+          border: 1px solid transparent;
+          transition: background-color var(--dur-2) var(--ease-ambient), border-color var(--dur-2) var(--ease-ambient), transform var(--dur-1) var(--ease-ambient);
+          -webkit-tap-highlight-color: transparent;
+          background: #fff;
+          border: 1px solid var(--border-sage);
+        }
+
+        .mc-option-label:hover { background-color: var(--hover-sage); }
+
+        .mc-option-item .option-control {
+          flex-shrink: 0;
+          inline-size: 24px;
+          block-size: 24px;
+          border: 2px solid var(--tertiary-sage);
+          background-color: var(--soft-white);
+          transition: all var(--dur-2) var(--ease-ambient);
+          position: relative;
+          border-radius: 50%;
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
+        }
+
+        .mc-option-item input[type="radio"]:checked + .option-control { border-color: var(--primary-sage); }
+
+        .mc-option-item input[type="radio"]:checked + .option-control::after {
+          content: '';
+          position: absolute;
+          inset: 50% auto auto 50%;
+          transform: translate(-50%, -50%);
+          width: 14px;
+          height: 14px;
+          border-radius: 50%;
+          background-color: var(--primary-sage);
+          box-shadow: 0 1px 0 rgba(255,255,255,0.4) inset;
+        }
+
+        .mc-option-text {
+          color: var(--primary-sage);
+          line-height: 1.4;
+          font-size: 1rem;
+        }
+
+        .mc-option-item input[type="radio"]:focus-visible + .option-control,
+        .mc-option-label:focus-visible {
+          outline: none;
+          box-shadow: var(--ring);
+        }
+
+        /* Slide controls */
+        .mc-slide-student-controls {
+          margin-top: var(--space-7);
+          display: flex;
+          justify-content: space-between;
+          gap: var(--space-3);
+          flex-wrap: wrap;
+        }
+
+        /* -------------------------------
+           Submission Screen
+        ----------------------------------*/
+        .submission-steps { margin-top: var(--space-7); }
+
+        #submission-code {
+          width: 100%;
+          height: 260px;
+          box-sizing: border-box;
+          margin: var(--space-3) 0;
+          font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+          font-size: 0.95rem;
+          padding: 12px 14px;
+          border: 1px solid var(--tertiary-sage);
+          border-radius: 10px;
+          background: #fff;
+          color: var(--ink);
+        }
+        
+        #submission-controls {
+            display: grid;
+            gap: var(--space-3);
+            grid-auto-flow: row;
+            margin-top: var(--space-4);
+        }
+        
+        #submission-status {
+            margin-top: var(--space-4);
+            font-weight: 700;
+            text-align: center;
+            min-height: 1.5em;
+        }
+
+        /* -------------------------------
+           Responsive / container queries
+        ----------------------------------*/
+        @media (max-width: 360px) {
+          #activity-container { padding: 18px; }
+          .activity-btn { padding-inline: 14px; }
+        }
+
+        @media (min-width: 768px) {
+          #app-wrapper { padding-inline: var(--space-7); }
+          .controls { grid-auto-flow: column; justify-content: center; }
+          #submission-controls { grid-auto-flow: column; justify-content: center; }
+          .test-header { grid-template-columns: auto 1fr auto auto; }
+        }
+
+        @media (min-width: 1024px) {
+          #activity-container { box-shadow: var(--shadow-3); }
+          h1 { letter-spacing: 0.3px; }
+        }
+
+        @container (min-width: 520px) {
+          .mc-question { padding: 24px; }
+          .mc-option-label { padding: 14px; }
+        }
+
+        @container (min-width: 760px) {
+          h1 { font-size: clamp(2rem, 2.2vw + 1rem, 2.75rem); }
+          .mc-question-text { font-size: clamp(1.1rem, 0.6vw + 0.9rem, 1.35rem); }
+        }
+
+        /* -------------------------------
+           Accessibility / motion / scroll
+        ----------------------------------*/
+        :focus-visible {
+          outline: none;
+          box-shadow: var(--ring);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          * {
+            animation: none !important;
+            transition: none !important;
+            scroll-behavior: auto !important;
+          }
+        }
+
+        ::selection {
+          background: color-mix(in srgb, var(--secondary-sage) 30%, #fff 70%);
+          color: var(--deep-forest);
+        }
+
+        html, body { overscroll-behavior-y: none; }
+
+        /* -------------------------------
+           Scrollbars (subtle, optional)
+        ----------------------------------*/
+        *::-webkit-scrollbar {
+          width: 10px;
+          height: 10px;
+        }
+        *::-webkit-scrollbar-thumb {
+          background: color-mix(in srgb, var(--primary-sage) 50%, var(--tertiary-sage) 50%);
+          border-radius: 999px;
+          border: 2px solid transparent;
+          background-clip: padding-box;
+        }
+        *::-webkit-scrollbar-track {
+          background: transparent;
+        }
+
+        /* -------------------------------
+           Dark mode (gentle, earthy)
+        ----------------------------------*/
+        @media (prefers-color-scheme: dark) {
+          :root {
+            --soft-white: #1E211C;
+            --warm-cream: #23261F;
+            --forest-shadow: #DDE6D4;
+            --ink: #E9EFE5;
+            --ink-muted: #AEB9AA;
+            --border-sage: rgba(184, 197, 166, 0.25);
+          }
+
+          html, body {
+            background:
+              radial-gradient(1100px 900px at 15% 10%, rgba(156,175,136,0.06), transparent 60%),
+              radial-gradient(900px 900px at 85% 90%, rgba(122,132,113,0.08), transparent 65%),
+              linear-gradient(135deg, #191D18 0%, #1B1E19 100%);
+          }
+
+          #activity-container {
+            background: color-mix(in srgb, #23261F 92%, #1B1E19 8%);
+            border-color: rgba(184, 197, 166, 0.18);
+            box-shadow: 0 12px 36px rgba(0,0,0,0.35);
+          }
+
+          a { color: color-mix(in srgb, var(--secondary-sage) 80%, #C7D3C0 20%); }
+
+          .mc-question {
+            background: linear-gradient(180deg, #20241E 0%, #191D18 100%);
+            border-color: rgba(184, 197, 166, 0.20);
+            box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 10px 30px rgba(0,0,0,0.35);
+          }
+
+          .activity-btn {
+            background: linear-gradient(180deg, color-mix(in srgb, var(--primary-sage) 80%, #0F120E 20%), var(--primary-sage));
+            box-shadow: 0 1px 0 rgba(255,255,255,0.08) inset, 0 8px 18px rgba(0,0,0,0.35);
+          }
+
+          .activity-btn:hover {
+            background: linear-gradient(180deg, color-mix(in srgb, var(--forest-shadow) 80%, #0F120E 20%), var(--forest-shadow));
+          }
+
+          input, textarea, select {
+            background: #141713;
+            border-color: rgba(184, 197, 166, 0.25);
+            color: var(--ink);
+          }
+
+          .mc-option-label {
+             background: #141713;
+             border-color: rgba(184, 197, 166, 0.25);
+          }
+
+          #progress-bar {
+            background: linear-gradient(90deg, var(--secondary-sage), color-mix(in srgb, var(--primary-sage) 70%, #000 30%));
+          }
+        }
+
+        /* -------------------------------
+           Original responsive tweaks, refined
+        ----------------------------------*/
+        @media (max-width: 767px) {
+          #app-wrapper { padding: var(--space-4); }
+          #activity-container { padding: 24px; }
+          h1 { font-size: clamp(1.75rem, 5vw, 2rem); }
+          h2.rubric { font-size: var(--step--1); margin-bottom: 20px; }
+          .mc-question-text { font-size: clamp(1.05rem, 2.6vw, 1.1rem); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app-wrapper">
+        <div id="activity-container">
+
+            <!-- Screen 1: Student ID -->
+            <div id="student-id-screen" class="screen">
+                <h1>IELTS Reading Practice – A1</h1>
+                <h2 class="rubric">Please enter your Student ID to begin.</h2>
+                <div class="input-group">
+                    <label for="student-id-input" class="visually-hidden">Student ID</label>
+                    <input type="text" id="student-id-input" placeholder="Enter your Student ID">
+                </div>
+                <div class="controls">
+                    <button id="student-id-next-btn" class="activity-btn">Next</button>
+                </div>
+            </div>
+
+            <!-- Screen 2: Level Select -->
+            <div id="level-select-screen" class="screen hidden">
+                <h1>Confirm Level: A1</h1>
+                                <div class="level-buttons">
+                    <button class="activity-btn" data-level="A1">A1</button>
+                    <button id="level-select-back-btn" class="activity-btn secondary" style="grid-column: 1 / -1; margin-top: var(--space-4);">Go Back</button>
+                </div>
+            </div>
+
+            <!-- Screen 3: Test Screen -->
+            <div id="test-screen" class="screen hidden">
+                <div class="test-header">
+                    <button id="test-back-btn" class="activity-btn secondary">Return to Start</button>
+                    <span id="current-level">Current Level: --</span>
+                    <span id="timer">60:00</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div id="progress-bar"></div>
+                </div>
+                <div id="progress-text">Passage 1 of 3</div>
+
+                                <div id="test-content">
+                    <div id="A1-test" class="level-test hidden">
+                        <!-- Passage 1 -->
+                        <div class="passage-slide" data-passage="1">
+                            <h3>Reading Passage 1: Questions 1-7</h3>
+                            <p>Read the five short texts. For questions 1-7, choose the correct text (A-E).</p>
+                            
+                            <h4>A. CITY MUSEUM</h4>
+                            <p>Open: 10 am – 4 pm Tuesday – Sunday<br>CLOSED MONDAY</p>
+
+                            <h4>B. PARK SPORTS CLUB</h4>
+                            <p>Tennis & Football<br>Open Every Day<br>9 am – 5 pm</p>
+
+                            <h4>C. CITY LIBRARY</h4>
+                            <p>For books and computer use<br>Mon–Fri: 9 am–6 pm<br>Sat: 10 am–2 pm, Sun: Closed</p>
+
+                            <h4>D. Message</h4>
+                            <p>To: Sam<br>From: Maria<br>Hi Sam,<br>Let's go to the park. I am free on Tuesday at 11 am. Is that good for you?<br>Maria</p>
+                            
+                            <h4>E. For Sale: Bicycle</h4>
+                            <p>Red, almost new. Price: £50<br>Call David on 555-2345 after 5 pm.</p>
+                            
+                            <div class="mc-question">
+                                <p class="mc-question-header mc-question-text">Which text (A, B, C, D, or E) says this?</p>
+                                <div class="input-group">
+                                    <label for="A1_q1">1. This place is open seven days a week.</label>
+                                    <select id="A1_q1" name="A1_q1"><option value="">Select...</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select>
+                                </div>
+                                <div class="input-group">
+                                    <label for="A1_q2">2. You can use a computer here.</label>
+                                    <select id="A1_q2" name="A1_q2"><option value="">Select...</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select>
+                                </div>
+                                <div class="input-group">
+                                    <label for="A1_q3">3. This is a personal message to a friend.</label>
+                                    <select id="A1_q3" name="A1_q3"><option value="">Select...</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select>
+                                </div>
+                                <div class="input-group">
+                                    <label for="A1_q4">4. This is about selling something.</label>
+                                    <select id="A1_q4" name="A1_q4"><option value="">Select...</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select>
+                                </div>
+                                <div class="input-group">
+                                    <label for="A1_q5">5. This place is not open on Mondays.</label>
+                                    <select id="A1_q5" name="A1_q5"><option value="">Select...</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select>
+                                </div>
+                                <div class="input-group">
+                                    <label for="A1_q6">6. You should call after 5 pm.</label>
+                                    <select id="A1_q6" name="A1_q6"><option value="">Select...</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select>
+                                </div>
+                                <div class="input-group">
+                                    <label for="A1_q7">7. This place closes at 2 pm on one day of the weekend.</label>
+                                    <select id="A1_q7" name="A1_q7"><option value="">Select...</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Passage 2 -->
+                        <div class="passage-slide hidden" data-passage="2">
+                           <h3>Reading Passage 2: Questions 8-20</h3>
+                           <h4>My Name is Fatima</h4>
+                           <p>My name is Fatima, and I am a student. I am from Morocco. I live in a small house in Casablanca with my mother, father, and my two brothers. My father is a doctor at a hospital. My mother is a teacher at a school. My brothers are students, like me.</p>
+                           <p>I go to a big school near my house. I walk to school every morning with my brothers. My favourite subject is English because I like to learn new words. I also like Art. I do not like Maths. For me, it is difficult.</p>
+                           <p>In the evening, I do my homework in my room. After my homework, I watch television with my family in the living room. We like to watch films. On the weekend, we go to the park or we visit my grandmother. She lives in a different city, so we travel by train.</p>
+
+                           <div class="mc-question">
+                               <p class="mc-question-header mc-question-text">Questions 8-14: Are the sentences ‘True’ or ‘False’?</p>
+                               <div class="mc-options-container">
+                                    <p>8. Fatima lives with four other people.</p>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q8_t"><input type="radio" id="A1_q8_t" name="A1_q8" value="True"><span class="option-control"></span><span class="mc-option-text">True</span></label></div>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q8_f"><input type="radio" id="A1_q8_f" name="A1_q8" value="False"><span class="option-control"></span><span class="mc-option-text">False</span></label></div>
+                                    <p>9. Her mother works at a hospital.</p>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q9_t"><input type="radio" id="A1_q9_t" name="A1_q9" value="True"><span class="option-control"></span><span class="mc-option-text">True</span></label></div>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q9_f"><input type="radio" id="A1_q9_f" name="A1_q9" value="False"><span class="option-control"></span><span class="mc-option-text">False</span></label></div>
+                                    <p>10. Fatima takes the bus to school.</p>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q10_t"><input type="radio" id="A1_q10_t" name="A1_q10" value="True"><span class="option-control"></span><span class="mc-option-text">True</span></label></div>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q10_f"><input type="radio" id="A1_q10_f" name="A1_q10" value="False"><span class="option-control"></span><span class="mc-option-text">False</span></label></div>
+                                    <p>11. She likes English because she enjoys learning new words.</p>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q11_t"><input type="radio" id="A1_q11_t" name="A1_q11" value="True"><span class="option-control"></span><span class="mc-option-text">True</span></label></div>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q11_f"><input type="radio" id="A1_q11_f" name="A1_q11" value="False"><span class="option-control"></span><span class="mc-option-text">False</span></label></div>
+                                    <p>12. She thinks Maths is easy.</p>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q12_t"><input type="radio" id="A1_q12_t" name="A1_q12" value="True"><span class="option-control"></span><span class="mc-option-text">True</span></label></div>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q12_f"><input type="radio" id="A1_q12_f" name="A1_q12" value="False"><span class="option-control"></span><span class="mc-option-text">False</span></label></div>
+                                    <p>13. She watches television before she does her homework.</p>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q13_t"><input type="radio" id="A1_q13_t" name="A1_q13" value="True"><span class="option-control"></span><span class="mc-option-text">True</span></label></div>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q13_f"><input type="radio" id="A1_q13_f" name="A1_q13" value="False"><span class="option-control"></span><span class="mc-option-text">False</span></label></div>
+                                    <p>14. Her family travels by train to see her grandmother.</p>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q14_t"><input type="radio" id="A1_q14_t" name="A1_q14" value="True"><span class="option-control"></span><span class="mc-option-text">True</span></label></div>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q14_f"><input type="radio" id="A1_q14_f" name="A1_q14" value="False"><span class="option-control"></span><span class="mc-option-text">False</span></label></div>
+                               </div>
+                           </div>
+
+                           <div class="mc-question">
+                               <p class="mc-question-header mc-question-text">Questions 15-20: Complete the sentences. Write ONE WORD from the text.</p>
+                               <p>15. Fatima lives in a small __________ with her family. <input type="text" id="A1_q15" name="A1_q15" class="fill-in-blank-input"></p>
+                               <p>16. Her father works as a __________. <input type="text" id="A1_q16" name="A1_q16" class="fill-in-blank-input"></p>
+                               <p>17. Fatima's school is __________ her house. <input type="text" id="A1_q17" name="A1_q17" class="fill-in-blank-input"></p>
+                               <p>18. She does her homework in her __________. <input type="text" id="A1_q18" name="A1_q18" class="fill-in-blank-input"></p>
+                               <p>19. After her homework, Fatima watches __________ with her family. <input type="text" id="A1_q19" name="A1_q19" class="fill-in-blank-input"></p>
+                               <p>20. On the weekend, the family sometimes visits her __________. <input type="text" id="A1_q20" name="A1_q20" class="fill-in-blank-input"></p>
+                           </div>
+                        </div>
+                        
+                        <!-- Passage 3 -->
+                        <div class="passage-slide hidden" data-passage="3">
+                            <h3>Reading Passage 3: Questions 21-40</h3>
+                            <h4>A Visit to the City Farm</h4>
+                            <p>Every Sunday morning, my family goes to the city farm. The farm is not big, but it has lots of interesting animals. It is near our home.</p>
+                            <p>First, we go to see the sheep. The sheep are white and make a soft noise. I like to watch the small lambs. They are very cute.</p>
+                            <p>Next, we go to the chicken house. My father likes the chickens. They are brown and red, and they look for food in the grass. We can see the fresh eggs in a basket.</p>
+                            <p>After that, we go to the garden. The farm has a garden with many flowers and plants. My mother likes the red and yellow flowers. Sometimes, a worker is in the garden.</p>
+                            <p>Finally, we go home at 1 pm. We always have a nice time. I am happy after our visit to the city farm.</p>
+
+                            <div class="mc-question">
+                               <p class="mc-question-header mc-question-text">Questions 21-30: Choose the correct answer A, B, or C.</p>
+                               <div class="mc-options-container">
+                                    <p>21. When does the family go to the city farm?</p>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q21_a"><input type="radio" id="A1_q21_a" name="A1_q21" value="A"><span class="option-control"></span><span class="mc-option-text">A. Every day</span></label></div>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q21_b"><input type="radio" id="A1_q21_b" name="A1_q21" value="B"><span class="option-control"></span><span class="mc-option-text">B. Every Saturday</span></label></div>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q21_c"><input type="radio" id="A1_q21_c" name="A1_q21" value="C"><span class="option-control"></span><span class="mc-option-text">C. Every Sunday</span></label></div>
+                                    
+                                    <p>22. The text says the farm is...</p>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q22_a"><input type="radio" id="A1_q22_a" name="A1_q22" value="A"><span class="option-control"></span><span class="mc-option-text">A. far from their home.</span></label></div>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q22_b"><input type="radio" id="A1_q22_b" name="A1_q22" value="B"><span class="option-control"></span><span class="mc-option-text">B. not very big.</span></label></div>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q22_c"><input type="radio" id="A1_q22_c" name="A1_q22" value="C"><span class="option-control"></span><span class="mc-option-text">C. very noisy.</span></label></div>
+                                    
+                                    <p>23. The writer thinks the lambs are...</p>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q23_a"><input type="radio" id="A1_q23_a" name="A1_q23" value="A"><span class="option-control"></span><span class="mc-option-text">A. very small.</span></label></div>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q23_b"><input type="radio" id="A1_q23_b" name="A1_q23" value="B"><span class="option-control"></span><span class="mc-option-text">B. very cute.</span></label></div>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q23_c"><input type="radio" id="A1_q23_c" name="A1_q23" value="C"><span class="option-control"></span><span class="mc-option-text">C. very white.</span></label></div>
+                                    
+                                    <p>24. Who in the family likes the chickens?</p>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q24_a"><input type="radio" id="A1_q24_a" name="A1_q24" value="A"><span class="option-control"></span><span class="mc-option-text">A. The writer</span></label></div>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q24_b"><input type="radio" id="A1_q24_b" name="A1_q24" value="B"><span class="option-control"></span><span class="mc-option-text">B. The mother</span></label></div>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q24_c"><input type="radio" id="A1_q24_c" name="A1_q24" value="C"><span class="option-control"></span><span class="mc-option-text">C. The father</span></label></div>
+                                    
+                                    <p>25. Where can they see the eggs?</p>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q25_a"><input type="radio" id="A1_q25_a" name="A1_q25" value="A"><span class="option-control"></span><span class="mc-option-text">A. In the grass</span></label></div>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q25_b"><input type="radio" id="A1_q25_b" name="A1_q25" value="B"><span class="option-control"></span><span class="mc-option-text">B. In a basket</span></label></div>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q25_c"><input type="radio" id="A1_q25_c" name="A1_q25" value="C"><span class="option-control"></span><span class="mc-option-text">C. In the garden</span></label></div>
+
+                                    <p>26. What does the mother like at the farm?</p>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q26_a"><input type="radio" id="A1_q26_a" name="A1_q26" value="A"><span class="option-control"></span><span class="mc-option-text">A. The sheep</span></label></div>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q26_b"><input type="radio" id="A1_q26_b" name="A1_q26" value="B"><span class="option-control"></span><span class="mc-option-text">B. The eggs</span></label></div>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q26_c"><input type="radio" id="A1_q26_c" name="A1_q26" value="C"><span class="option-control"></span><span class="mc-option-text">C. The flowers</span></label></div>
+
+                                    <p>27. What time do they go home?</p>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q27_a"><input type="radio" id="A1_q27_a" name="A1_q27" value="A"><span class="option-control"></span><span class="mc-option-text">A. In the morning</span></label></div>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q27_b"><input type="radio" id="A1_q27_b" name="A1_q27" value="B"><span class="option-control"></span><span class="mc-option-text">B. At one o'clock</span></label></div>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q27_c"><input type="radio" id="A1_q27_c" name="A1_q27" value="C"><span class="option-control"></span><span class="mc-option-text">C. In the evening</span></label></div>
+
+                                    <p>28. The family has a __________ time at the farm.</p>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q28_a"><input type="radio" id="A1_q28_a" name="A1_q28" value="A"><span class="option-control"></span><span class="mc-option-text">A. nice</span></label></div>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q28_b"><input type="radio" id="A1_q28_b" name="A1_q28" value="B"><span class="option-control"></span><span class="mc-option-text">B. long</span></label></div>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q28_c"><input type="radio" id="A1_q28_c" name="A1_q28" value="C"><span class="option-control"></span><span class="mc-option-text">C. quiet</span></label></div>
+
+                                    <p>29. Who is sometimes in the garden?</p>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q29_a"><input type="radio" id="A1_q29_a" name="A1_q29" value="A"><span class="option-control"></span><span class="mc-option-text">A. The father</span></label></div>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q29_b"><input type="radio" id="A1_q29_b" name="A1_q29" value="B"><span class="option-control"></span><span class="mc-option-text">B. A worker</span></label></div>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q29_c"><input type="radio" id="A1_q29_c" name="A1_q29" value="C"><span class="option-control"></span><span class="mc-option-text">C. The writer</span></label></div>
+
+                                    <p>30. How does the writer feel after the visit?</p>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q30_a"><input type="radio" id="A1_q30_a" name="A1_q30" value="A"><span class="option-control"></span><span class="mc-option-text">A. Tired</span></label></div>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q30_b"><input type="radio" id="A1_q30_b" name="A1_q30" value="B"><span class="option-control"></span><span class="mc-option-text">B. Sad</span></label></div>
+                                    <div class="mc-option-item"><label class="mc-option-label" for="A1_q30_c"><input type="radio" id="A1_q30_c" name="A1_q30" value="C"><span class="option-control"></span><span class="mc-option-text">C. Happy</span></label></div>
+                               </div>
+                            </div>
+                            
+                            <div class="mc-question">
+                               <p class="mc-question-header mc-question-text">Questions 31-40: Complete the sentences. Write ONE WORD from the text.</p>
+                               <p>31. The city farm is near the writer's __________. <input type="text" id="A1_q31" name="A1_q31" class="fill-in-blank-input"></p>
+                               <p>32. The farm has many interesting __________. <input type="text" id="A1_q32" name="A1_q32" class="fill-in-blank-input"></p>
+                               <p>33. The sheep are the colour __________. <input type="text" id="A1_q33" name="A1_q33" class="fill-in-blank-input"></p>
+                               <p>34. The writer likes to watch the small __________. <input type="text" id="A1_q34" name="A1_q34" class="fill-in-blank-input"></p>
+                               <p>35. The chickens are brown and __________. <input type="text" id="A1_q35" name="A1_q35" class="fill-in-blank-input"></p>
+                               <p>36. The chickens search for __________ in the grass. <input type="text" id="A1_q36" name="A1_q36" class="fill-in-blank-input"></p>
+                               <p>37. The farm's garden has flowers and __________. <input type="text" id="A1_q37" name="A1_q37" class="fill-in-blank-input"></p>
+                               <p>38. The mother likes the red and __________ flowers. <input type="text" id="A1_q38" name="A1_q38" class="fill-in-blank-input"></p>
+                               <p>39. The sheep make a __________ noise. <input type="text" id="A1_q39" name="A1_q39" class="fill-in-blank-input"></p>
+                               <p>40. In the basket, the eggs are __________. <input type="text" id="A1_q40" name="A1_q40" class="fill-in-blank-input"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Universal navigation controls for all tests -->
+                <div id="slide-navigation-controls" class="mc-slide-student-controls">
+                    <button id="prev-slide-btn" class="activity-btn secondary">Previous</button>
+                    <button id="next-slide-btn" class="activity-btn">Next</button>
+                </div>
+
+            </div>
+
+            <!-- Screen 4: Submission -->
+            <div id="submission-screen" class="screen hidden">
+                <h1>Submission</h1>
+                <h2 class="rubric">Your test is complete. Please review your answers and choose a submission option below.</h2>
+                <textarea id="submission-code" readonly></textarea>
+                <div id="submission-controls">
+                    <button id="download-csv-btn" class="activity-btn">Download Results as CSV</button>
+                    <button id="submit-instructor-btn" class="activity-btn secondary">Submit to Instructor</button>
+                    <button id="submission-back-btn" class="activity-btn secondary">Start Over</button>
+                </div>
+                <div id="submission-status"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- STATE MANAGEMENT ---
+            let studentID = '';
+            let currentLevel = '';
+            let userAnswers = {};
+            let timerInterval;
+
+            // --- GOOGLE SHEETS CONFIG ---
+            const GS_WEB_APP_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+
+            // --- DOM ELEMENTS ---
+            const screens = {
+                studentId: document.getElementById('student-id-screen'),
+                levelSelect: document.getElementById('level-select-screen'),
+                test: document.getElementById('test-screen'),
+                submission: document.getElementById('submission-screen'),
+            };
+            
+            const studentIdInput = document.getElementById('student-id-input');
+            const studentIdNextBtn = document.getElementById('student-id-next-btn');
+            const levelSelectButtons = document.querySelectorAll('.level-buttons .activity-btn');
+            
+            const currentLevelDisplay = document.getElementById('current-level');
+            const timerDisplay = document.getElementById('timer');
+            
+            const submissionCodeTextarea = document.getElementById('submission-code');
+            const downloadCsvBtn = document.getElementById('download-csv-btn');
+            const submitInstructorBtn = document.getElementById('submit-instructor-btn');
+            const submissionStatus = document.getElementById('submission-status');
+            
+            const levelSelectBackBtn = document.getElementById('level-select-back-btn');
+            const testBackBtn = document.getElementById('test-back-btn');
+            const submissionBackBtn = document.getElementById('submission-back-btn');
+
+            // --- FUNCTIONS ---
+
+            function showScreen(screenName) {
+                Object.values(screens).forEach(screen => screen.classList.add('hidden'));
+                if (screens[screenName]) {
+                    screens[screenName].classList.remove('hidden');
+                }
+            }
+            
+            function resetApp() {
+                clearInterval(timerInterval);
+                studentID = '';
+                currentLevel = '';
+                userAnswers = {};
+                studentIdInput.value = '';
+                submissionCodeTextarea.value = '';
+                submissionStatus.textContent = '';
+                submitInstructorBtn.disabled = false;
+                
+                document.querySelectorAll('.level-test').forEach(test => test.classList.add('hidden'));
+                document.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
+                document.querySelectorAll('input[type="text"]').forEach(text => text.value = '');
+                document.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
+                
+                // Restore original navigation controls if they were replaced
+                const slideNavigation = document.getElementById('slide-navigation-controls');
+                slideNavigation.innerHTML = `
+                    <button id="prev-slide-btn" class="activity-btn secondary">Previous</button>
+                    <button id="next-slide-btn" class="activity-btn">Next</button>
+                `;
+
+                showScreen('studentId');
+            }
+
+            function startTest(level) {
+                currentLevel = level;
+                userAnswers = {}; // Reset answers
+                currentLevelDisplay.textContent = `Current Level: ${level.replace('_plus', '+')}`;
+                
+                // Hide all level-test containers
+                document.querySelectorAll('.level-test').forEach(test => test.classList.add('hidden'));
+                
+                const selectedTestContainer = document.getElementById(`${level}-test`);
+                if (selectedTestContainer) {
+                    // Show the entire container for the selected level
+                    selectedTestContainer.classList.remove('hidden');
+                    
+                    // Ensure all passage slides within this container are visible
+                    const slides = selectedTestContainer.querySelectorAll('.passage-slide');
+                    slides.forEach(slide => slide.classList.remove('hidden'));
+                    
+                    // Replace slide navigation with a single "Finish Test" button
+                    const slideNavigation = document.getElementById('slide-navigation-controls');
+                    slideNavigation.innerHTML = '<button id="finish-test-btn" class="activity-btn">Finish Test</button>';
+                    document.getElementById('finish-test-btn').addEventListener('click', goToSubmission);
+                    
+                    // Hide progress bar elements as they are not needed for a single-page view
+                    document.querySelector('.progress-bar-container').style.display = 'none';
+                    document.getElementById('progress-text').style.display = 'none';
+
+                    startTimer(3600); // 60 minutes
+                    showScreen('test');
+                } else {
+                    console.error(`Test content for level ${level} not found.`);
+                    alert(`Error: Test content for level ${level} could not be found.`);
+                    showScreen('levelSelect');
+                }
+            }
+
+            function startTimer(duration) {
+                let timer = duration;
+                clearInterval(timerInterval);
+
+                timerInterval = setInterval(() => {
+                    let minutes = parseInt(timer / 60, 10);
+                    let seconds = parseInt(timer % 60, 10);
+
+                    minutes = minutes < 10 ? "0" + minutes : minutes;
+                    seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                    timerDisplay.textContent = `${minutes}:${seconds}`;
+
+                    if (--timer < 0) {
+                        clearInterval(timerInterval);
+                        goToSubmission();
+                    }
+                }, 1000);
+            }
+            
+            function recordAnswer(event) {
+                const input = event.target;
+                const questionId = input.name;
+                const answerValue = input.value;
+                if(questionId) {
+                    userAnswers[questionId] = answerValue;
+                }
+            }
+
+            function goToSubmission() {
+                clearInterval(timerInterval);
+                prepareSubmissionData();
+                showScreen('submission');
+            }
+            
+            function prepareSubmissionData() {
+                let summaryText = `Student ID: ${studentID}\nLevel: ${currentLevel.replace('_plus', '+')}\n\n--- Answers ---\n`;
+                const questionKeys = Object.keys(userAnswers).sort((a, b) => {
+                    const numA = parseInt(a.match(/\d+/)[0]);
+                    const numB = parseInt(b.match(/\d+/)[0]);
+                    return numA - numB;
+                });
+
+                questionKeys.forEach(key => {
+                    summaryText += `${key}: ${userAnswers[key]}\n`;
+                });
+                submissionCodeTextarea.value = summaryText;
+            }
+
+            function downloadCSV() {
+                const headers = ['Level', 'QuestionNumber', 'StudentAnswer'];
+                let csvContent = "data:text/csv;charset=utf-8," + headers.join(',') + '\n';
+
+                const questionKeys = Object.keys(userAnswers).sort((a, b) => {
+                    const numA = parseInt(a.match(/\d+/)[0]);
+                    const numB = parseInt(b.match(/\d+/)[0]);
+                    return numA - numB;
+                });
+                
+                questionKeys.forEach(key => {
+                    const row = [currentLevel.replace('_plus', '+'), key, `"${userAnswers[key]}"`];
+                    csvContent += row.join(',') + '\n';
+                });
+                
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", `${studentID}_IELTS_Results.csv`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+
+            async function submitToGoogleSheet() {
+                 if (GS_WEB_APP_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+                    submissionStatus.textContent = "Error: Google Apps Script URL is not configured.";
+                    submissionStatus.style.color = 'red';
+                    return;
+                }
+
+                submissionStatus.textContent = 'Submitting...';
+                submissionStatus.style.color = 'var(--secondary-sage)';
+                submitInstructorBtn.disabled = true;
+
+                const data = {
+                    studentID: studentID,
+                    level: currentLevel,
+                    answers: userAnswers,
+                };
+
+                try {
+                    const response = await fetch(GS_WEB_APP_URL, {
+                        method: 'POST',
+                        mode: 'no-cors', 
+                        cache: 'no-cache',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data),
+                        redirect: 'follow',
+                    });
+                    
+                    submissionStatus.textContent = "Successfully submitted!";
+                    submissionStatus.style.color = 'green';
+
+                } catch (error) {
+                    console.error('Error:', error);
+                    submissionStatus.textContent = `Error: Could not submit. ${error.message}`;
+                    submissionStatus.style.color = 'red';
+                    submitInstructorBtn.disabled = false;
+                }
+            }
+
+            // --- EVENT LISTENERS ---
+
+            studentIdNextBtn.addEventListener('click', () => {
+                const id = studentIdInput.value.trim();
+                if (id) {
+                    studentID = id;
+                    showScreen('levelSelect');
+                } else {
+                    alert('Please enter a Student ID.');
+                }
+            });
+
+            levelSelectButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const level = button.getAttribute('data-level');
+                    if (level) {
+                       startTest(level);
+                    }
+                });
+            });
+            
+            document.getElementById('test-content').addEventListener('change', recordAnswer);
+            document.getElementById('test-content').addEventListener('input', recordAnswer); // For text fields
+            
+            downloadCsvBtn.addEventListener('click', downloadCSV);
+            submitInstructorBtn.addEventListener('click', submitToGoogleSheet);
+            
+            // Back button listeners
+            levelSelectBackBtn.addEventListener('click', () => showScreen('studentId'));
+            testBackBtn.addEventListener('click', resetApp);
+            submissionBackBtn.addEventListener('click', resetApp);
+            
+            // --- INITIALIZATION ---
+            showScreen('studentId');
+        });
+    </script>
+</body>
+</html>

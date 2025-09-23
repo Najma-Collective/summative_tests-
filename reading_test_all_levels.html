@@ -1,3 +1,9 @@
+Of course. I have implemented the fix you provided. The original script at the bottom of the HTML file has been replaced with the corrected version you supplied.
+
+This new script restructures the exam flow as you requested. When a user selects a level, all questions for that level are now displayed on a single, scrollable page, eliminating the confusing slide-based navigation and ensuring the correct question order. The "Previous" and "Next" buttons have been replaced with a single "Finish Test" button at the bottom of the page.
+
+Here is the complete, corrected HTML file with the new script integrated.
+
 ```html
 <!DOCTYPE html>
 <html lang="en">
@@ -1278,8 +1284,6 @@
             let currentLevel = '';
             let userAnswers = {};
             let timerInterval;
-            let currentTestSlides = [];
-            let currentSlideIndex = 0;
 
             // --- GOOGLE SHEETS CONFIG ---
             const GS_WEB_APP_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
@@ -1298,11 +1302,6 @@
             
             const currentLevelDisplay = document.getElementById('current-level');
             const timerDisplay = document.getElementById('timer');
-            const progressBar = document.getElementById('progress-bar');
-            const progressText = document.getElementById('progress-text');
-
-            const prevSlideBtn = document.getElementById('prev-slide-btn');
-            const nextSlideBtn = document.getElementById('next-slide-btn');
             
             const submissionCodeTextarea = document.getElementById('submission-code');
             const downloadCsvBtn = document.getElementById('download-csv-btn');
@@ -1312,7 +1311,6 @@
             const levelSelectBackBtn = document.getElementById('level-select-back-btn');
             const testBackBtn = document.getElementById('test-back-btn');
             const submissionBackBtn = document.getElementById('submission-back-btn');
-
 
             // --- FUNCTIONS ---
 
@@ -1328,7 +1326,6 @@
                 studentID = '';
                 currentLevel = '';
                 userAnswers = {};
-                currentSlideIndex = 0;
                 studentIdInput.value = '';
                 submissionCodeTextarea.value = '';
                 submissionStatus.textContent = '';
@@ -1339,6 +1336,13 @@
                 document.querySelectorAll('input[type="text"]').forEach(text => text.value = '');
                 document.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
                 
+                // Restore original navigation controls if they were replaced
+                const slideNavigation = document.getElementById('slide-navigation-controls');
+                slideNavigation.innerHTML = `
+                    <button id="prev-slide-btn" class="activity-btn secondary">Previous</button>
+                    <button id="next-slide-btn" class="activity-btn">Next</button>
+                `;
+
                 showScreen('studentId');
             }
 
@@ -1347,14 +1351,27 @@
                 userAnswers = {}; // Reset answers
                 currentLevelDisplay.textContent = `Current Level: ${level.replace('_plus', '+')}`;
                 
+                // Hide all level-test containers
                 document.querySelectorAll('.level-test').forEach(test => test.classList.add('hidden'));
                 
                 const selectedTestContainer = document.getElementById(`${level}-test`);
                 if (selectedTestContainer) {
+                    // Show the entire container for the selected level
                     selectedTestContainer.classList.remove('hidden');
-                    currentTestSlides = Array.from(selectedTestContainer.querySelectorAll('.passage-slide'));
-                    currentSlideIndex = 0;
-                    showSlide(currentSlideIndex);
+                    
+                    // Ensure all passage slides within this container are visible
+                    const slides = selectedTestContainer.querySelectorAll('.passage-slide');
+                    slides.forEach(slide => slide.classList.remove('hidden'));
+                    
+                    // Replace slide navigation with a single "Finish Test" button
+                    const slideNavigation = document.getElementById('slide-navigation-controls');
+                    slideNavigation.innerHTML = '<button id="finish-test-btn" class="activity-btn">Finish Test</button>';
+                    document.getElementById('finish-test-btn').addEventListener('click', goToSubmission);
+                    
+                    // Hide progress bar elements as they are not needed for a single-page view
+                    document.querySelector('.progress-bar-container').style.display = 'none';
+                    document.getElementById('progress-text').style.display = 'none';
+
                     startTimer(3600); // 60 minutes
                     showScreen('test');
                 } else {
@@ -1362,29 +1379,6 @@
                     alert(`Error: Test content for level ${level} could not be found.`);
                     showScreen('levelSelect');
                 }
-            }
-            
-            function showSlide(index) {
-                currentTestSlides.forEach((slide, i) => {
-                    slide.classList.toggle('hidden', i !== index);
-                });
-                updateNavigation();
-                updateProgress();
-            }
-
-            function updateNavigation() {
-                prevSlideBtn.disabled = currentSlideIndex === 0;
-                if (currentSlideIndex === currentTestSlides.length - 1) {
-                    nextSlideBtn.textContent = 'Go to Submission';
-                } else {
-                    nextSlideBtn.textContent = 'Next';
-                }
-            }
-
-            function updateProgress() {
-                const progressPercentage = ((currentSlideIndex + 1) / currentTestSlides.length) * 100;
-                progressBar.style.width = `${progressPercentage}%`;
-                progressText.textContent = `Passage ${currentSlideIndex + 1} of ${currentTestSlides.length}`;
             }
 
             function startTimer(duration) {
@@ -1500,7 +1494,6 @@
                 }
             }
 
-
             // --- EVENT LISTENERS ---
 
             studentIdNextBtn.addEventListener('click', () => {
@@ -1520,22 +1513,6 @@
                        startTest(level);
                     }
                 });
-            });
-            
-            prevSlideBtn.addEventListener('click', () => {
-                if (currentSlideIndex > 0) {
-                    currentSlideIndex--;
-                    showSlide(currentSlideIndex);
-                }
-            });
-
-            nextSlideBtn.addEventListener('click', () => {
-                if (currentSlideIndex < currentTestSlides.length - 1) {
-                    currentSlideIndex++;
-                    showSlide(currentSlideIndex);
-                } else {
-                    goToSubmission();
-                }
             });
             
             document.getElementById('test-content').addEventListener('change', recordAnswer);
